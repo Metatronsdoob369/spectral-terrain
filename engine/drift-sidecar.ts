@@ -44,12 +44,20 @@ const NOMIC_DIM          = 768;
 //   validity — runs below this threshold log a warning and skip the block.
 //   Cutover criteria: median delta stays favorable for 2-3 consecutive runs.
 //
-// NOMIC_768_PRIMARY=1  (future cutover flag — not yet enforced)
-//   When set, switches the active collection and embed model to 768.
-//   One env var, zero code changes required for rollback.
-//   Only promote after A/B criteria are met.
+// NOMIC_768_PRIMARY=1
+//   LIVE CUTOVER FLAG. Switches the active scoring collection to
+//   spectral-heatmap-768. Both fetchFlaggedPoints and patchDriftMagnitude
+//   operate on ACTIVE_COLLECTION — flipping this flag is the full cutover.
+//   Rollback: unset NOMIC_768_PRIMARY. Zero code changes required.
+//   Only promote after 2-3 consecutive favorable A/B runs (sampled >= 25).
+//
+//   Note: the embedder stays nomic-embed-text in both modes — mxbai cannot
+//   embed Unicode faithfully, so drift measurement always uses nomic's space.
+//   What changes is WHICH Qdrant collection holds the canonical terrain points.
 //
 // Activate A/B: NOMIC_768_DUAL=1 npm run drift
+// Cutover:      NOMIC_768_PRIMARY=1 npm run drift
+// Rollback:     (unset NOMIC_768_PRIMARY)
 // ─────────────────────────────────────────────────────────────────
 const NOMIC_768_DUAL    = process.env["NOMIC_768_DUAL"]    === "1";
 const NOMIC_768_PRIMARY = process.env["NOMIC_768_PRIMARY"] === "1";
@@ -58,10 +66,11 @@ const NOMIC_768_PRIMARY = process.env["NOMIC_768_PRIMARY"] === "1";
 // statistically meaningful. Below this threshold the block is skipped.
 const NOMIC_768_MIN_SAMPLE = 25;
 
-// Active collection/model — overridden by NOMIC_768_PRIMARY flag
-const ACTIVE_COLLECTION = NOMIC_768_PRIMARY ? HEATMAP_768_COLL   : HEATMAP_COLLECTION;
-const ACTIVE_EMBED_DIM  = NOMIC_768_PRIMARY ? 768                : 1024;
-// (ACTIVE_COLLECTION / ACTIVE_EMBED_DIM reserved for cutover wiring — not yet enforced in scoring path)
+// Active collection — switched by NOMIC_768_PRIMARY flag.
+// ACTIVE_EMBED_DIM documents the expected vector dimension for the active collection.
+// Both fetchFlaggedPoints and patchDriftMagnitude use ACTIVE_COLLECTION.
+const ACTIVE_COLLECTION = NOMIC_768_PRIMARY ? HEATMAP_768_COLL : HEATMAP_COLLECTION;
+const ACTIVE_EMBED_DIM  = NOMIC_768_PRIMARY ? 768              : 1024;  // for artifact metadata only
 
 // ─────────────────────────────────────────────────────────────────
 // NOMIC EMBEDDER — Unicode-native, no stripping
@@ -223,7 +232,7 @@ async function fetchFlaggedPoints(domain?: Domain): Promise<FlaggedPoint[]> {
     };
     if (offset) body.offset = offset;
 
-    const res = await fetch(`${QDRANT_URL}/collections/${HEATMAP_COLLECTION}/points/scroll`, {
+    const res = await fetch(`${QDRANT_URL}/collections/${ACTIVE_COLLECTION}/points/scroll`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
@@ -257,7 +266,7 @@ async function fetchFlaggedPoints(domain?: Domain): Promise<FlaggedPoint[]> {
 // ─────────────────────────────────────────────────────────────────
 
 async function patchDriftMagnitude(id: string, magnitude: number): Promise<void> {
-  const res = await fetch(`${QDRANT_URL}/collections/${HEATMAP_COLLECTION}/points/payload`, {
+  const res = await fetch(`${QDRANT_URL}/collections/${ACTIVE_COLLECTION}/points/payload`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -342,7 +351,14 @@ function resolveSource(relFile: string): string | null {
 // ─────────────────────────────────────────────────────────────────
 
 export async function runDriftSidecar(domain?: Domain): Promise<void> {
-  console.log("\n[drift-sidecar] Scanning for unicode_drift_risk points...");
+  if (NOMIC_768_PRIMARY) {
+    console.log("\n[drift-sidecar] *** PRIMARY MODE: NOMIC_768_PRIMARY=1 ***");
+    console.log(`[drift-sidecar] Active collection: ${ACTIVE_COLLECTION} (${ACTIVE_EMBED_DIM}-D)`);
+    console.log("[drift-sidecar] Rollback: unset NOMIC_768_PRIMARY and rerun");
+  } else {
+    console.log("\n[drift-sidecar] Scanning for unicode_drift_risk points...");
+    console.log(`[drift-sidecar] Active collection: ${ACTIVE_COLLECTION} (${ACTIVE_EMBED_DIM}-D)`);
+  }
 
   // Confirm nomic is available
   const check = await fetch(`${OLLAMA_URL}/api/tags`, { signal: AbortSignal.timeout(3000) }).catch(() => null);
@@ -517,8 +533,10 @@ export async function runDriftSidecar(domain?: Domain): Promise<void> {
   }
 
   const artifact = {
-    timestamp:  new Date().toISOString(),
-    domain:     domain ?? null,
+    timestamp:        new Date().toISOString(),
+    domain:           domain ?? null,
+    activeCollection: ACTIVE_COLLECTION,
+    activeEmbedDim:   ACTIVE_EMBED_DIM,
     status,
     counters: {
       queued:   flagged.length,
