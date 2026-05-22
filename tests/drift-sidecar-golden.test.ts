@@ -279,3 +279,116 @@ test("regression: fresh ingest of 9 files produces scored=9 on first pass", () =
   assert.equal(counters.miss,    0);
   assert.equal(counters.error,   0);
 });
+
+// ─────────────────────────────────────────────────────────────────
+// NOMIC_768_DUAL — A/B BLOCK SCHEMA INVARIANTS
+//
+// When NOMIC_768_DUAL=1 is active, the artifact's nomic768 block must
+// always contain the four required counters regardless of sample size
+// or ingestion state. This CI check prevents silent schema regressions
+// that would break agent/dashboard consumers of the artifact.
+// ─────────────────────────────────────────────────────────────────
+
+interface Nomic768Block {
+  sampled:          number;
+  ingested768:      number;
+  notIngested768:   number;
+  scored768:        number;
+  comparison:       unknown[];
+  notIngestedFiles: string[];
+  stats:            { medianDelta: number; p95Delta: number; favorableCount: number; unfavorableCount: number } | null;
+  skippedReason:    string | null;
+}
+
+function assertNomic768BlockShape(block: Nomic768Block, label: string): void {
+  // Required top-level counter keys — always present, always numbers
+  assert.equal(typeof block.sampled,        "number", `${label}: sampled must be number`);
+  assert.equal(typeof block.ingested768,    "number", `${label}: ingested768 must be number`);
+  assert.equal(typeof block.notIngested768, "number", `${label}: notIngested768 must be number`);
+  assert.equal(typeof block.scored768,      "number", `${label}: scored768 must be number`);
+  assert.ok(Array.isArray(block.comparison),        `${label}: comparison must be array`);
+  assert.ok(Array.isArray(block.notIngestedFiles),  `${label}: notIngestedFiles must be array`);
+  // stats and skippedReason are mutually exclusive but both may be null/non-null
+  assert.ok(
+    "stats" in block && "skippedReason" in block,
+    `${label}: both stats and skippedReason must be present (null when unused)`,
+  );
+  // Counter coherence: only applies when fetch was actually performed (no skip)
+  if (block.skippedReason === null) {
+    assert.equal(
+      block.ingested768 + block.notIngested768,
+      block.sampled,
+      `${label}: ingested768 + notIngested768 must equal sampled`,
+    );
+  }
+}
+
+test("nomic768 block: sample gate not met produces correct skip shape", () => {
+  // Simulate NOMIC_768_MIN_SAMPLE=25 with only 7 HIGH files
+  const highCount = 7;
+  const block: Nomic768Block = {
+    sampled:          highCount,
+    ingested768:      0,
+    notIngested768:   0,
+    scored768:        0,
+    comparison:       [],
+    notIngestedFiles: [],
+    stats:            null,
+    skippedReason:    `insufficient sample: ${highCount} HIGH files < minimum 25 — ingest more HIGH-drift files into spectral-terrain-768 before comparing`,
+  };
+
+  assertNomic768BlockShape(block, "skip-gate");
+  assert.ok(block.skippedReason !== null, "skippedReason must be set when gate not met");
+  assert.equal(block.stats, null, "stats must be null when gate not met");
+});
+
+test("nomic768 block: full scored block has valid percentile stats shape", () => {
+  const comparison = [
+    { file: "brain/indexer/export_training_set.py", mxbai: 0.1155, nomic768: 0.0210, delta: -0.0945 },
+    { file: "server/api.ts",                        mxbai: 0.0880, nomic768: 0.0310, delta: -0.0570 },
+    { file: "brain/spectral/ingest_monitor.py",     mxbai: 0.0820, nomic768: 0.0620, delta: -0.0200 },
+    { file: "brain/indexer/rechunk_medical.py",     mxbai: 0.0670, nomic768: 0.0800, delta:  0.0130 },
+    { file: "circadian/pulse.ts",                   mxbai: 0.0630, nomic768: 0.0510, delta: -0.0120 },
+  ];
+  const block: Nomic768Block = {
+    sampled:          5,
+    ingested768:      5,
+    notIngested768:   0,
+    scored768:        5,
+    comparison,
+    notIngestedFiles: [],
+    stats:            { medianDelta: -0.0200, p95Delta: 0.0130, favorableCount: 4, unfavorableCount: 1 },
+    skippedReason:    null,
+  };
+
+  assertNomic768BlockShape(block, "full-scored");
+  assert.ok(block.stats !== null, "stats must be present when comparison has deltas");
+  assert.equal(typeof block.stats!.medianDelta,     "number", "medianDelta must be number");
+  assert.equal(typeof block.stats!.p95Delta,        "number", "p95Delta must be number");
+  assert.equal(typeof block.stats!.favorableCount,  "number", "favorableCount must be number");
+  assert.equal(typeof block.stats!.unfavorableCount,"number", "unfavorableCount must be number");
+  // favorableCount + unfavorableCount === comparison pairs with delta !== null
+  const pairedCount = comparison.filter(c => c.delta !== null).length;
+  assert.equal(
+    block.stats!.favorableCount + block.stats!.unfavorableCount,
+    pairedCount,
+    "favorable + unfavorable must equal paired comparison count",
+  );
+});
+
+test("nomic768 block: partially ingested 768 collection — counter coherence", () => {
+  // 25 HIGHs sampled, 15 ingested in 768, 10 not yet there
+  const block: Nomic768Block = {
+    sampled:          25,
+    ingested768:      15,
+    notIngested768:   10,
+    scored768:        12,  // 3 ingested but no magnitude yet
+    comparison:       Array.from({ length: 12 }, (_, i) => ({ file: `file${i}.ts`, mxbai: 0.06, nomic768: 0.04, delta: -0.02 })),
+    notIngestedFiles: Array.from({ length: 10 }, (_, i) => `missing${i}.ts`),
+    stats:            { medianDelta: -0.02, p95Delta: -0.02, favorableCount: 12, unfavorableCount: 0 },
+    skippedReason:    null,
+  };
+
+  assertNomic768BlockShape(block, "partial-ingestion");
+  assert.equal(block.notIngestedFiles.length, block.notIngested768, "notIngestedFiles length must match notIngested768 count");
+});

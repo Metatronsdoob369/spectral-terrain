@@ -36,17 +36,32 @@ const NOMIC_MODEL        = "nomic-embed-text";
 const NOMIC_DIM          = 768;
 
 // ─────────────────────────────────────────────────────────────────
-// FEATURE FLAG — spectral-terrain-768 dual-write A/B telemetry
+// FEATURE FLAGS — spectral-terrain-768 A/B telemetry + cutover
 //
-// When NOMIC_768_DUAL=1, each sidecar run also fetches drift data
-// from the 768 collection and writes it as a parallel block in the
-// telemetry artifact under the key "nomic768". This lets you compare
-// mxbai-path drift vs nomic-native 768-D drift side-by-side before
-// deciding to cut over to spectral-terrain-768.
+// NOMIC_768_DUAL=1
+//   Activates parallel 768-collection scoring block in telemetry.
+//   Requires >=25 HIGH-drift files sampled per domain for statistical
+//   validity — runs below this threshold log a warning and skip the block.
+//   Cutover criteria: median delta stays favorable for 2-3 consecutive runs.
 //
-// Activate: NOMIC_768_DUAL=1 npm run drift
+// NOMIC_768_PRIMARY=1  (future cutover flag — not yet enforced)
+//   When set, switches the active collection and embed model to 768.
+//   One env var, zero code changes required for rollback.
+//   Only promote after A/B criteria are met.
+//
+// Activate A/B: NOMIC_768_DUAL=1 npm run drift
 // ─────────────────────────────────────────────────────────────────
-const NOMIC_768_DUAL = process.env["NOMIC_768_DUAL"] === "1";
+const NOMIC_768_DUAL    = process.env["NOMIC_768_DUAL"]    === "1";
+const NOMIC_768_PRIMARY = process.env["NOMIC_768_PRIMARY"] === "1";
+
+// Minimum HIGH-drift file count required before A/B comparison is
+// statistically meaningful. Below this threshold the block is skipped.
+const NOMIC_768_MIN_SAMPLE = 25;
+
+// Active collection/model — overridden by NOMIC_768_PRIMARY flag
+const ACTIVE_COLLECTION = NOMIC_768_PRIMARY ? HEATMAP_768_COLL   : HEATMAP_COLLECTION;
+const ACTIVE_EMBED_DIM  = NOMIC_768_PRIMARY ? 768                : 1024;
+// (ACTIVE_COLLECTION / ACTIVE_EMBED_DIM reserved for cutover wiring — not yet enforced in scoring path)
 
 // ─────────────────────────────────────────────────────────────────
 // NOMIC EMBEDDER — Unicode-native, no stripping
@@ -408,44 +423,96 @@ export async function runDriftSidecar(domain?: Domain): Promise<void> {
     :                                    "clean";
 
   // Optional: A/B comparison block from spectral-terrain-768
+  //
+  // Schema (when populated):
+  //   sampled, ingested768, notIngested768, scored768  — always present
+  //   comparison[]  — per-file { file, mxbai, nomic768, delta }
+  //   notIngestedFiles[]
+  //   stats: { medianDelta, p95Delta, favorableCount, unfavorableCount }
+  //   skippedReason — set when sample gate not met (sampled < NOMIC_768_MIN_SAMPLE)
   let nomic768Block: Record<string, unknown> | null = null;
   if (NOMIC_768_DUAL && scored.length > 0) {
     console.log("\n[drift-sidecar] NOMIC_768_DUAL=1 — fetching 768-collection A/B data...");
-    const high768Files = scored.filter(r => r.magnitude >= 0.05).map(r => r.file);
-    // If no HIGHs, sample all scored files for comparison
-    const sampleFiles = high768Files.length > 0 ? high768Files : scored.map(r => r.file);
-    const nomic768Points = await fetchNomic768DriftForFiles(sampleFiles);
+    const highFiles = scored.filter(r => r.magnitude >= 0.05);
 
-    const ingested   = nomic768Points.filter(p => p.ingested);
-    const notIngested = nomic768Points.filter(p => !p.ingested);
-    const scored768  = ingested.filter(p => p.magnitude !== undefined);
+    // Minimum sample gate — below threshold the block records the skip reason
+    // and skips the 768 fetch entirely (no statistical value in the comparison).
+    if (highFiles.length < NOMIC_768_MIN_SAMPLE) {
+      nomic768Block = {
+        sampled:           highFiles.length,
+        ingested768:       0,
+        notIngested768:    0,
+        scored768:         0,
+        comparison:        [],
+        notIngestedFiles:  [],
+        stats:             null,
+        skippedReason:     `insufficient sample: ${highFiles.length} HIGH files < minimum ${NOMIC_768_MIN_SAMPLE} — ingest more HIGH-drift files into spectral-terrain-768 before comparing`,
+      };
+      console.log(`  [skip] A/B block requires >=${NOMIC_768_MIN_SAMPLE} HIGH files, got ${highFiles.length}`);
+    } else {
+      const sampleFiles = highFiles.map(r => r.file);
+      const nomic768Points = await fetchNomic768DriftForFiles(sampleFiles);
 
-    const mxbaiByFile = new Map(scored.map(r => [r.file, r.magnitude]));
-    const comparison  = scored768.map(p => ({
-      file:     p.file,
-      mxbai:    mxbaiByFile.get(p.file),
-      nomic768: p.magnitude,
-      delta:    p.magnitude !== undefined && mxbaiByFile.has(p.file)
-                  ? (p.magnitude! - mxbaiByFile.get(p.file)!)
-                  : null,
-    }));
+      const ingested    = nomic768Points.filter(p => p.ingested);
+      const notIngested = nomic768Points.filter(p => !p.ingested);
+      const scored768   = ingested.filter(p => p.magnitude !== undefined);
 
-    nomic768Block = {
-      sampled:       sampleFiles.length,
-      ingested768:   ingested.length,
-      notIngested768: notIngested.length,
-      scored768:     scored768.length,
-      comparison,
-      notIngestedFiles: notIngested.map(p => p.file),
-    };
+      const mxbaiByFile = new Map(scored.map(r => [r.file, r.magnitude]));
+      const comparison  = scored768.map(p => ({
+        file:     p.file,
+        mxbai:    mxbaiByFile.get(p.file),
+        nomic768: p.magnitude,
+        delta:    p.magnitude !== undefined && mxbaiByFile.has(p.file)
+                    ? (p.magnitude! - mxbaiByFile.get(p.file)!)
+                    : null,
+      }));
 
-    console.log(`  768 sampled: ${sampleFiles.length} | ingested: ${ingested.length} | scored: ${scored768.length} | missing: ${notIngested.length}`);
-    if (notIngested.length > 0) {
-      console.log(`  Not yet in 768 collection — run: cd /NODE_OUT_Master/spectral-terrain-768 && npx tsx engine/ingest.ts --domain source-audit --path <root>`);
-    }
-    for (const c of comparison) {
-      const delta = c.delta != null ? (c.delta >= 0 ? `+${c.delta.toFixed(6)}` : c.delta.toFixed(6)) : "—";
-      console.log(`  ${c.file} | mxbai: ${c.mxbai?.toFixed(6) ?? "—"} | nomic768: ${c.nomic768?.toFixed(6) ?? "—"} | delta: ${delta}`);
+      // Percentile stats over deltas — only over pairs where both sides scored
+      const deltas = comparison
+        .map(c => c.delta)
+        .filter((d): d is number => d !== null)
+        .sort((a, b) => a - b);
+
+      const stats = deltas.length > 0 ? (() => {
+        const mid = Math.floor(deltas.length / 2);
+        const median = deltas.length % 2 === 0
+          ? (deltas[mid - 1] + deltas[mid]) / 2
+          : deltas[mid];
+        const p95idx = Math.ceil(deltas.length * 0.95) - 1;
+        const p95    = deltas[Math.max(0, p95idx)];
+        // Negative delta = nomic768 sees LESS drift than mxbai = favorable for 768 cutover
+        const favorableCount   = deltas.filter(d => d < 0).length;
+        const unfavorableCount = deltas.filter(d => d > 0).length;
+        return { medianDelta: median, p95Delta: p95, favorableCount, unfavorableCount };
+      })() : null;
+
+      nomic768Block = {
+        sampled:          sampleFiles.length,
+        ingested768:      ingested.length,
+        notIngested768:   notIngested.length,
+        scored768:        scored768.length,
+        comparison,
+        notIngestedFiles: notIngested.map(p => p.file),
+        stats,
+        skippedReason:    null,
+      };
+
+      console.log(`  768 sampled: ${sampleFiles.length} | ingested: ${ingested.length} | scored: ${scored768.length} | missing: ${notIngested.length}`);
+      if (stats) {
+        const medStr = stats.medianDelta >= 0 ? `+${stats.medianDelta.toFixed(6)}` : stats.medianDelta.toFixed(6);
+        const p95Str = stats.p95Delta    >= 0 ? `+${stats.p95Delta.toFixed(6)}`    : stats.p95Delta.toFixed(6);
+        console.log(`  Delta stats: median ${medStr} | p95 ${p95Str} | favorable: ${stats.favorableCount} | unfavorable: ${stats.unfavorableCount}`);
+        if (stats.favorableCount > stats.unfavorableCount) {
+          console.log(`  Signal: 768 shows LESS drift on majority of HIGH files — favorable for cutover`);
+        }
+      }
+      if (notIngested.length > 0) {
+        console.log(`  Not yet in 768 collection — run: cd /NODE_OUT_Master/spectral-terrain-768 && npx tsx engine/ingest.ts --domain source-audit --path <root>`);
+      }
+      for (const c of comparison) {
+        const delta = c.delta != null ? (c.delta >= 0 ? `+${c.delta.toFixed(6)}` : c.delta.toFixed(6)) : "—";
+        console.log(`  ${c.file} | mxbai: ${c.mxbai?.toFixed(6) ?? "—"} | nomic768: ${c.nomic768?.toFixed(6) ?? "—"} | delta: ${delta}`);
+      }
     }
   }
 
