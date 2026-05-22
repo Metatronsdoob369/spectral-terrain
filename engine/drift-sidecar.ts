@@ -371,6 +371,25 @@ export async function runDriftSidecar(domain?: Domain): Promise<void> {
 
   if (flagged.length === 0) {
     console.log("[drift-sidecar] No flagged points found. Terrain is clean.");
+    // Write a stub artifact so the collection switch is visible in telemetry
+    // even on zero-queue runs. Agents and dashboards can confirm which collection
+    // was active without having to re-parse the console banner.
+    const telemetryDir = join(__dirname, "../telemetry");
+    mkdirSync(telemetryDir, { recursive: true });
+    const stub = {
+      timestamp:        new Date().toISOString(),
+      domain:           null as null,
+      activeCollection: ACTIVE_COLLECTION,
+      activeEmbedDim:   ACTIVE_EMBED_DIM,
+      status:           "clean" as const,
+      counters:         { queued: 0, scored: 0, skipped: 0, miss: 0, error: 0 },
+      drift:            null,
+      nomic768:         null,
+    };
+    const serialized = JSON.stringify(stub, null, 2);
+    writeFileSync(join(telemetryDir, `drift-run-${Date.now()}.json`), serialized);
+    writeFileSync(join(telemetryDir, "latest-drift-run.json"), serialized);
+    console.log(`[drift-sidecar] Artifact written: activeCollection=${ACTIVE_COLLECTION}`);
     return;
   }
 
