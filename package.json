@@ -20,7 +20,9 @@
     "watchdog": "tsx engine/watchdog.ts --mode observe",
     "watchdog:enforce": "tsx engine/watchdog.ts --mode enforce",
     "threat-intake": "tsx engine/threat-intake.ts",
-    "defense-writer": "tsx engine/defense-writer.ts"
+    "defense-writer": "tsx engine/defense-writer.ts",
+    "circadian": "tsx engine/circadian.ts",
+    "circadian:audit": "tsx engine/circadian.ts --domain source-audit"
   },
   "dependencies": {
     "zod": "^3.25.76"
