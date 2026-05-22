@@ -64,7 +64,10 @@ const NOMIC_768_PRIMARY = process.env["NOMIC_768_PRIMARY"] === "1";
 
 // Minimum HIGH-drift file count required before A/B comparison is
 // statistically meaningful. Below this threshold the block is skipped.
-const NOMIC_768_MIN_SAMPLE = 25;
+// Override via NOMIC_768_MIN_SAMPLE env var for smaller corpora.
+const NOMIC_768_MIN_SAMPLE = process.env["NOMIC_768_MIN_SAMPLE"]
+  ? parseInt(process.env["NOMIC_768_MIN_SAMPLE"], 10)
+  : 25;
 
 // Active collection — switched by NOMIC_768_PRIMARY flag.
 // ACTIVE_EMBED_DIM documents the expected vector dimension for the active collection.
