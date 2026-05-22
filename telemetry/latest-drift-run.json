@@ -1,0 +1,13 @@
+{
+  "timestamp": "2026-05-22T17:38:13.715Z",
+  "domain": null,
+  "status": "clean",
+  "counters": {
+    "queued": 36,
+    "scored": 0,
+    "skipped": 36,
+    "miss": 0,
+    "error": 0
+  },
+  "drift": null
+}

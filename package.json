@@ -1,0 +1,29 @@
+{
+  "name": "@nodeout/spectral-terrain",
+  "version": "0.1.1",
+  "description": "Temporal Geometric Intelligence Layer — proprietary NODE OUT",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "ingest": "tsx engine/ingest.ts",
+    "calibrate": "tsx engine/calibrate.ts",
+    "query": "tsx engine/query.ts",
+    "ingest:roblox": "tsx engine/ingest.ts --domain roblox-luau --path",
+    "ingest:audit": "tsx engine/ingest.ts --domain source-audit --path",
+    "calibrate:roblox": "tsx engine/calibrate.ts --domain roblox-luau",
+    "calibrate:audit": "tsx engine/calibrate.ts --domain source-audit",
+    "test": "tsx --test tests/**/*.test.ts",
+    "drift": "tsx engine/drift-sidecar.ts",
+    "integrity": "tsx engine/terrain-integrity.ts",
+    "ci": "npm run test && npm run integrity",
+    "promote": "npm run ci && echo 'CI gate passed — terrain is promotion-ready'"
+  },
+  "dependencies": {
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "4.22.3",
+    "typescript": "^5.8.3"
+  }
+}

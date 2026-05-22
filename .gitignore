@@ -1,0 +1,21 @@
+node_modules/
+dist/
+*.js.map
+*.d.ts
+
+# Telemetry — timestamped artifacts are runtime state, not source
+telemetry/drift-run-*.json
+telemetry/ingest-*.json
+# latest-drift-run.json is intentionally tracked as the canonical current-state snapshot
+
+# Session handoffs — scaffolding artifacts, not source
+handoffs/
+
+# Calibration centroids are generated artifacts — track them (they're the baseline)
+# calibration/ is intentionally included
+
+# Lock files
+/tmp/spectral-terrain-ingest.lock
+
+# macOS
+.DS_Store
