@@ -28,11 +28,25 @@ import type { Domain } from "../contracts/terrain.contract.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const QDRANT_URL        = "http://127.0.0.1:6340";
+const QDRANT_URL         = "http://127.0.0.1:6340";
 const HEATMAP_COLLECTION = "spectral-heatmap";
-const OLLAMA_URL        = "http://127.0.0.1:11434";
-const NOMIC_MODEL       = "nomic-embed-text";
-const NOMIC_DIM         = 768;
+const HEATMAP_768_COLL   = "spectral-heatmap-768";
+const OLLAMA_URL         = "http://127.0.0.1:11434";
+const NOMIC_MODEL        = "nomic-embed-text";
+const NOMIC_DIM          = 768;
+
+// ─────────────────────────────────────────────────────────────────
+// FEATURE FLAG — spectral-terrain-768 dual-write A/B telemetry
+//
+// When NOMIC_768_DUAL=1, each sidecar run also fetches drift data
+// from the 768 collection and writes it as a parallel block in the
+// telemetry artifact under the key "nomic768". This lets you compare
+// mxbai-path drift vs nomic-native 768-D drift side-by-side before
+// deciding to cut over to spectral-terrain-768.
+//
+// Activate: NOMIC_768_DUAL=1 npm run drift
+// ─────────────────────────────────────────────────────────────────
+const NOMIC_768_DUAL = process.env["NOMIC_768_DUAL"] === "1";
 
 // ─────────────────────────────────────────────────────────────────
 // NOMIC EMBEDDER — Unicode-native, no stripping
@@ -240,6 +254,55 @@ async function patchDriftMagnitude(id: string, magnitude: number): Promise<void>
 }
 
 // ─────────────────────────────────────────────────────────────────
+// NOMIC-768 A/B QUERY — reads drift data from spectral-heatmap-768
+//
+// Fetches unicode_drift_magnitude (if ingested) for a list of files.
+// Does NOT re-embed — reads only what's already in the 768 collection.
+// Returns a map of file → drift magnitude (undefined if not ingested).
+// ─────────────────────────────────────────────────────────────────
+
+interface Nomic768Point {
+  file: string;
+  magnitude: number | undefined;
+  ingested: boolean;
+}
+
+async function fetchNomic768DriftForFiles(files: string[]): Promise<Nomic768Point[]> {
+  const results: Nomic768Point[] = [];
+
+  for (const file of files) {
+    try {
+      const res = await fetch(`${QDRANT_URL}/collections/${HEATMAP_768_COLL}/points/scroll`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          limit: 1,
+          with_vector: false,
+          with_payload: true,
+          filter: { must: [{ key: "file", match: { value: file } }] },
+        }),
+      });
+      if (!res.ok) { results.push({ file, magnitude: undefined, ingested: false }); continue; }
+      const data = await res.json() as { result: { points: { payload: any }[] } };
+      if (!data.result.points.length) {
+        results.push({ file, magnitude: undefined, ingested: false });
+      } else {
+        const p = data.result.points[0].payload;
+        results.push({
+          file,
+          magnitude: p.unicode_drift_magnitude as number | undefined,
+          ingested: true,
+        });
+      }
+    } catch {
+      results.push({ file, magnitude: undefined, ingested: false });
+    }
+  }
+
+  return results;
+}
+
+// ─────────────────────────────────────────────────────────────────
 // RESOLVE FILE SOURCE FROM QDRANT PAYLOAD
 // The terrain point stores file as a relative path.
 // We need to find the actual file on disk to re-read it.
@@ -344,6 +407,48 @@ export async function runDriftSidecar(domain?: Domain): Promise<void> {
     : nMiss > 0 || nError > 0          ? "degraded"
     :                                    "clean";
 
+  // Optional: A/B comparison block from spectral-terrain-768
+  let nomic768Block: Record<string, unknown> | null = null;
+  if (NOMIC_768_DUAL && scored.length > 0) {
+    console.log("\n[drift-sidecar] NOMIC_768_DUAL=1 — fetching 768-collection A/B data...");
+    const high768Files = scored.filter(r => r.magnitude >= 0.05).map(r => r.file);
+    // If no HIGHs, sample all scored files for comparison
+    const sampleFiles = high768Files.length > 0 ? high768Files : scored.map(r => r.file);
+    const nomic768Points = await fetchNomic768DriftForFiles(sampleFiles);
+
+    const ingested   = nomic768Points.filter(p => p.ingested);
+    const notIngested = nomic768Points.filter(p => !p.ingested);
+    const scored768  = ingested.filter(p => p.magnitude !== undefined);
+
+    const mxbaiByFile = new Map(scored.map(r => [r.file, r.magnitude]));
+    const comparison  = scored768.map(p => ({
+      file:     p.file,
+      mxbai:    mxbaiByFile.get(p.file),
+      nomic768: p.magnitude,
+      delta:    p.magnitude !== undefined && mxbaiByFile.has(p.file)
+                  ? (p.magnitude! - mxbaiByFile.get(p.file)!)
+                  : null,
+    }));
+
+    nomic768Block = {
+      sampled:       sampleFiles.length,
+      ingested768:   ingested.length,
+      notIngested768: notIngested.length,
+      scored768:     scored768.length,
+      comparison,
+      notIngestedFiles: notIngested.map(p => p.file),
+    };
+
+    console.log(`  768 sampled: ${sampleFiles.length} | ingested: ${ingested.length} | scored: ${scored768.length} | missing: ${notIngested.length}`);
+    if (notIngested.length > 0) {
+      console.log(`  Not yet in 768 collection — run: cd /NODE_OUT_Master/spectral-terrain-768 && npx tsx engine/ingest.ts --domain source-audit --path <root>`);
+    }
+    for (const c of comparison) {
+      const delta = c.delta != null ? (c.delta >= 0 ? `+${c.delta.toFixed(6)}` : c.delta.toFixed(6)) : "—";
+      console.log(`  ${c.file} | mxbai: ${c.mxbai?.toFixed(6) ?? "—"} | nomic768: ${c.nomic768?.toFixed(6) ?? "—"} | delta: ${delta}`);
+    }
+  }
+
   const artifact = {
     timestamp:  new Date().toISOString(),
     domain:     domain ?? null,
@@ -361,6 +466,7 @@ export async function runDriftSidecar(domain?: Domain): Promise<void> {
       maxFile: max!.file,
       high:    scored.filter(r => r.magnitude >= 0.05).map(r => ({ file: r.file, magnitude: r.magnitude })),
     } : null,
+    nomic768: nomic768Block,
   };
 
   const telemetryDir = join(__dirname, "../telemetry");
@@ -384,6 +490,7 @@ export async function runDriftSidecar(domain?: Domain): Promise<void> {
   writeFileSync(join(telemetryDir, "latest-drift-run.json"), serialized);
   console.log(`  Status:     ${status}`);
   console.log(`  Artifact:   ${artifactPath}`);
+  if (NOMIC_768_DUAL) console.log(`  A/B mode:   nomic768 block written (NOMIC_768_DUAL=1)`);
 }
 
 // CLI
