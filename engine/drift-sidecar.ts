@@ -28,11 +28,49 @@ import type { Domain } from "../contracts/terrain.contract.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const QDRANT_URL        = "http://127.0.0.1:6340";
+const QDRANT_URL         = "http://127.0.0.1:6340";
 const HEATMAP_COLLECTION = "spectral-heatmap";
-const OLLAMA_URL        = "http://127.0.0.1:11434";
-const NOMIC_MODEL       = "nomic-embed-text";
-const NOMIC_DIM         = 768;
+const HEATMAP_768_COLL   = "spectral-heatmap-768";
+const OLLAMA_URL         = "http://127.0.0.1:11434";
+const NOMIC_MODEL        = "nomic-embed-text";
+const NOMIC_DIM          = 768;
+
+// ─────────────────────────────────────────────────────────────────
+// FEATURE FLAGS — spectral-terrain-768 A/B telemetry + cutover
+//
+// NOMIC_768_DUAL=1
+//   Activates parallel 768-collection scoring block in telemetry.
+//   Requires >=25 HIGH-drift files sampled per domain for statistical
+//   validity — runs below this threshold log a warning and skip the block.
+//   Cutover criteria: median delta stays favorable for 2-3 consecutive runs.
+//
+// NOMIC_768_PRIMARY=1
+//   LIVE CUTOVER FLAG. Switches the active scoring collection to
+//   spectral-heatmap-768. Both fetchFlaggedPoints and patchDriftMagnitude
+//   operate on ACTIVE_COLLECTION — flipping this flag is the full cutover.
+//   Rollback: unset NOMIC_768_PRIMARY. Zero code changes required.
+//   Only promote after 2-3 consecutive favorable A/B runs (sampled >= 25).
+//
+//   Note: the embedder stays nomic-embed-text in both modes — mxbai cannot
+//   embed Unicode faithfully, so drift measurement always uses nomic's space.
+//   What changes is WHICH Qdrant collection holds the canonical terrain points.
+//
+// Activate A/B: NOMIC_768_DUAL=1 npm run drift
+// Cutover:      NOMIC_768_PRIMARY=1 npm run drift
+// Rollback:     (unset NOMIC_768_PRIMARY)
+// ─────────────────────────────────────────────────────────────────
+const NOMIC_768_DUAL    = process.env["NOMIC_768_DUAL"]    === "1";
+const NOMIC_768_PRIMARY = process.env["NOMIC_768_PRIMARY"] === "1";
+
+// Minimum HIGH-drift file count required before A/B comparison is
+// statistically meaningful. Below this threshold the block is skipped.
+const NOMIC_768_MIN_SAMPLE = 25;
+
+// Active collection — switched by NOMIC_768_PRIMARY flag.
+// ACTIVE_EMBED_DIM documents the expected vector dimension for the active collection.
+// Both fetchFlaggedPoints and patchDriftMagnitude use ACTIVE_COLLECTION.
+const ACTIVE_COLLECTION = NOMIC_768_PRIMARY ? HEATMAP_768_COLL : HEATMAP_COLLECTION;
+const ACTIVE_EMBED_DIM  = NOMIC_768_PRIMARY ? 768              : 1024;  // for artifact metadata only
 
 // ─────────────────────────────────────────────────────────────────
 // NOMIC EMBEDDER — Unicode-native, no stripping
@@ -194,7 +232,7 @@ async function fetchFlaggedPoints(domain?: Domain): Promise<FlaggedPoint[]> {
     };
     if (offset) body.offset = offset;
 
-    const res = await fetch(`${QDRANT_URL}/collections/${HEATMAP_COLLECTION}/points/scroll`, {
+    const res = await fetch(`${QDRANT_URL}/collections/${ACTIVE_COLLECTION}/points/scroll`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
@@ -228,7 +266,7 @@ async function fetchFlaggedPoints(domain?: Domain): Promise<FlaggedPoint[]> {
 // ─────────────────────────────────────────────────────────────────
 
 async function patchDriftMagnitude(id: string, magnitude: number): Promise<void> {
-  const res = await fetch(`${QDRANT_URL}/collections/${HEATMAP_COLLECTION}/points/payload`, {
+  const res = await fetch(`${QDRANT_URL}/collections/${ACTIVE_COLLECTION}/points/payload`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -237,6 +275,55 @@ async function patchDriftMagnitude(id: string, magnitude: number): Promise<void>
     }),
   });
   if (!res.ok) throw new Error(`Qdrant patch failed: ${res.statusText}`);
+}
+
+// ─────────────────────────────────────────────────────────────────
+// NOMIC-768 A/B QUERY — reads drift data from spectral-heatmap-768
+//
+// Fetches unicode_drift_magnitude (if ingested) for a list of files.
+// Does NOT re-embed — reads only what's already in the 768 collection.
+// Returns a map of file → drift magnitude (undefined if not ingested).
+// ─────────────────────────────────────────────────────────────────
+
+interface Nomic768Point {
+  file: string;
+  magnitude: number | undefined;
+  ingested: boolean;
+}
+
+async function fetchNomic768DriftForFiles(files: string[]): Promise<Nomic768Point[]> {
+  const results: Nomic768Point[] = [];
+
+  for (const file of files) {
+    try {
+      const res = await fetch(`${QDRANT_URL}/collections/${HEATMAP_768_COLL}/points/scroll`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          limit: 1,
+          with_vector: false,
+          with_payload: true,
+          filter: { must: [{ key: "file", match: { value: file } }] },
+        }),
+      });
+      if (!res.ok) { results.push({ file, magnitude: undefined, ingested: false }); continue; }
+      const data = await res.json() as { result: { points: { payload: any }[] } };
+      if (!data.result.points.length) {
+        results.push({ file, magnitude: undefined, ingested: false });
+      } else {
+        const p = data.result.points[0].payload;
+        results.push({
+          file,
+          magnitude: p.unicode_drift_magnitude as number | undefined,
+          ingested: true,
+        });
+      }
+    } catch {
+      results.push({ file, magnitude: undefined, ingested: false });
+    }
+  }
+
+  return results;
 }
 
 // ─────────────────────────────────────────────────────────────────
@@ -264,7 +351,14 @@ function resolveSource(relFile: string): string | null {
 // ─────────────────────────────────────────────────────────────────
 
 export async function runDriftSidecar(domain?: Domain): Promise<void> {
-  console.log("\n[drift-sidecar] Scanning for unicode_drift_risk points...");
+  if (NOMIC_768_PRIMARY) {
+    console.log("\n[drift-sidecar] *** PRIMARY MODE: NOMIC_768_PRIMARY=1 ***");
+    console.log(`[drift-sidecar] Active collection: ${ACTIVE_COLLECTION} (${ACTIVE_EMBED_DIM}-D)`);
+    console.log("[drift-sidecar] Rollback: unset NOMIC_768_PRIMARY and rerun");
+  } else {
+    console.log("\n[drift-sidecar] Scanning for unicode_drift_risk points...");
+    console.log(`[drift-sidecar] Active collection: ${ACTIVE_COLLECTION} (${ACTIVE_EMBED_DIM}-D)`);
+  }
 
   // Confirm nomic is available
   const check = await fetch(`${OLLAMA_URL}/api/tags`, { signal: AbortSignal.timeout(3000) }).catch(() => null);
@@ -277,6 +371,25 @@ export async function runDriftSidecar(domain?: Domain): Promise<void> {
 
   if (flagged.length === 0) {
     console.log("[drift-sidecar] No flagged points found. Terrain is clean.");
+    // Write a stub artifact so the collection switch is visible in telemetry
+    // even on zero-queue runs. Agents and dashboards can confirm which collection
+    // was active without having to re-parse the console banner.
+    const telemetryDir = join(__dirname, "../telemetry");
+    mkdirSync(telemetryDir, { recursive: true });
+    const stub = {
+      timestamp:        new Date().toISOString(),
+      domain:           null as null,
+      activeCollection: ACTIVE_COLLECTION,
+      activeEmbedDim:   ACTIVE_EMBED_DIM,
+      status:           "clean" as const,
+      counters:         { queued: 0, scored: 0, skipped: 0, miss: 0, error: 0 },
+      drift:            null,
+      nomic768:         null,
+    };
+    const serialized = JSON.stringify(stub, null, 2);
+    writeFileSync(join(telemetryDir, `drift-run-${Date.now()}.json`), serialized);
+    writeFileSync(join(telemetryDir, "latest-drift-run.json"), serialized);
+    console.log(`[drift-sidecar] Artifact written: activeCollection=${ACTIVE_COLLECTION}`);
     return;
   }
 
@@ -344,9 +457,105 @@ export async function runDriftSidecar(domain?: Domain): Promise<void> {
     : nMiss > 0 || nError > 0          ? "degraded"
     :                                    "clean";
 
+  // Optional: A/B comparison block from spectral-terrain-768
+  //
+  // Schema (when populated):
+  //   sampled, ingested768, notIngested768, scored768  — always present
+  //   comparison[]  — per-file { file, mxbai, nomic768, delta }
+  //   notIngestedFiles[]
+  //   stats: { medianDelta, p95Delta, favorableCount, unfavorableCount }
+  //   skippedReason — set when sample gate not met (sampled < NOMIC_768_MIN_SAMPLE)
+  let nomic768Block: Record<string, unknown> | null = null;
+  if (NOMIC_768_DUAL && scored.length > 0) {
+    console.log("\n[drift-sidecar] NOMIC_768_DUAL=1 — fetching 768-collection A/B data...");
+    const highFiles = scored.filter(r => r.magnitude >= 0.05);
+
+    // Minimum sample gate — below threshold the block records the skip reason
+    // and skips the 768 fetch entirely (no statistical value in the comparison).
+    if (highFiles.length < NOMIC_768_MIN_SAMPLE) {
+      nomic768Block = {
+        sampled:           highFiles.length,
+        ingested768:       0,
+        notIngested768:    0,
+        scored768:         0,
+        comparison:        [],
+        notIngestedFiles:  [],
+        stats:             null,
+        skippedReason:     `insufficient sample: ${highFiles.length} HIGH files < minimum ${NOMIC_768_MIN_SAMPLE} — ingest more HIGH-drift files into spectral-terrain-768 before comparing`,
+      };
+      console.log(`  [skip] A/B block requires >=${NOMIC_768_MIN_SAMPLE} HIGH files, got ${highFiles.length}`);
+    } else {
+      const sampleFiles = highFiles.map(r => r.file);
+      const nomic768Points = await fetchNomic768DriftForFiles(sampleFiles);
+
+      const ingested    = nomic768Points.filter(p => p.ingested);
+      const notIngested = nomic768Points.filter(p => !p.ingested);
+      const scored768   = ingested.filter(p => p.magnitude !== undefined);
+
+      const mxbaiByFile = new Map(scored.map(r => [r.file, r.magnitude]));
+      const comparison  = scored768.map(p => ({
+        file:     p.file,
+        mxbai:    mxbaiByFile.get(p.file),
+        nomic768: p.magnitude,
+        delta:    p.magnitude !== undefined && mxbaiByFile.has(p.file)
+                    ? (p.magnitude! - mxbaiByFile.get(p.file)!)
+                    : null,
+      }));
+
+      // Percentile stats over deltas — only over pairs where both sides scored
+      const deltas = comparison
+        .map(c => c.delta)
+        .filter((d): d is number => d !== null)
+        .sort((a, b) => a - b);
+
+      const stats = deltas.length > 0 ? (() => {
+        const mid = Math.floor(deltas.length / 2);
+        const median = deltas.length % 2 === 0
+          ? (deltas[mid - 1] + deltas[mid]) / 2
+          : deltas[mid];
+        const p95idx = Math.ceil(deltas.length * 0.95) - 1;
+        const p95    = deltas[Math.max(0, p95idx)];
+        // Negative delta = nomic768 sees LESS drift than mxbai = favorable for 768 cutover
+        const favorableCount   = deltas.filter(d => d < 0).length;
+        const unfavorableCount = deltas.filter(d => d > 0).length;
+        return { medianDelta: median, p95Delta: p95, favorableCount, unfavorableCount };
+      })() : null;
+
+      nomic768Block = {
+        sampled:          sampleFiles.length,
+        ingested768:      ingested.length,
+        notIngested768:   notIngested.length,
+        scored768:        scored768.length,
+        comparison,
+        notIngestedFiles: notIngested.map(p => p.file),
+        stats,
+        skippedReason:    null,
+      };
+
+      console.log(`  768 sampled: ${sampleFiles.length} | ingested: ${ingested.length} | scored: ${scored768.length} | missing: ${notIngested.length}`);
+      if (stats) {
+        const medStr = stats.medianDelta >= 0 ? `+${stats.medianDelta.toFixed(6)}` : stats.medianDelta.toFixed(6);
+        const p95Str = stats.p95Delta    >= 0 ? `+${stats.p95Delta.toFixed(6)}`    : stats.p95Delta.toFixed(6);
+        console.log(`  Delta stats: median ${medStr} | p95 ${p95Str} | favorable: ${stats.favorableCount} | unfavorable: ${stats.unfavorableCount}`);
+        if (stats.favorableCount > stats.unfavorableCount) {
+          console.log(`  Signal: 768 shows LESS drift on majority of HIGH files — favorable for cutover`);
+        }
+      }
+      if (notIngested.length > 0) {
+        console.log(`  Not yet in 768 collection — run: cd /NODE_OUT_Master/spectral-terrain-768 && npx tsx engine/ingest.ts --domain source-audit --path <root>`);
+      }
+      for (const c of comparison) {
+        const delta = c.delta != null ? (c.delta >= 0 ? `+${c.delta.toFixed(6)}` : c.delta.toFixed(6)) : "—";
+        console.log(`  ${c.file} | mxbai: ${c.mxbai?.toFixed(6) ?? "—"} | nomic768: ${c.nomic768?.toFixed(6) ?? "—"} | delta: ${delta}`);
+      }
+    }
+  }
+
   const artifact = {
-    timestamp:  new Date().toISOString(),
-    domain:     domain ?? null,
+    timestamp:        new Date().toISOString(),
+    domain:           domain ?? null,
+    activeCollection: ACTIVE_COLLECTION,
+    activeEmbedDim:   ACTIVE_EMBED_DIM,
     status,
     counters: {
       queued:   flagged.length,
@@ -361,6 +570,7 @@ export async function runDriftSidecar(domain?: Domain): Promise<void> {
       maxFile: max!.file,
       high:    scored.filter(r => r.magnitude >= 0.05).map(r => ({ file: r.file, magnitude: r.magnitude })),
     } : null,
+    nomic768: nomic768Block,
   };
 
   const telemetryDir = join(__dirname, "../telemetry");
@@ -384,6 +594,7 @@ export async function runDriftSidecar(domain?: Domain): Promise<void> {
   writeFileSync(join(telemetryDir, "latest-drift-run.json"), serialized);
   console.log(`  Status:     ${status}`);
   console.log(`  Artifact:   ${artifactPath}`);
+  if (NOMIC_768_DUAL) console.log(`  A/B mode:   nomic768 block written (NOMIC_768_DUAL=1)`);
 }
 
 // CLI

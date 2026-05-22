@@ -16,7 +16,9 @@
     "drift": "tsx engine/drift-sidecar.ts",
     "integrity": "tsx engine/terrain-integrity.ts",
     "ci": "npm run test && npm run integrity",
-    "promote": "npm run ci && echo 'CI gate passed — terrain is promotion-ready'"
+    "promote": "npm run ci && echo 'CI gate passed — terrain is promotion-ready'",
+    "watchdog": "tsx engine/watchdog.ts --mode observe",
+    "watchdog:enforce": "tsx engine/watchdog.ts --mode enforce"
   },
   "dependencies": {
     "zod": "^3.25.76"
