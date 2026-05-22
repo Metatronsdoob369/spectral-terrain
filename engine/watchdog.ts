@@ -35,6 +35,8 @@ import { fileURLToPath } from "url";
 import { createServer } from "http";
 import { embed, computeShatter } from "./embed.js";
 import { loadCentroid } from "./calibrate.js";
+import { loadDomainProfile, runThreatIntake } from "./threat-intake.js";
+import { writeDefense } from "./defense-writer.js";
 import type { Domain } from "../contracts/terrain.contract.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -47,13 +49,13 @@ const QDRANT_URL         = "http://127.0.0.1:6340";
 const SLOP_CANON_COLL    = "slop-canon";
 const OLLAMA_URL         = "http://127.0.0.1:11434";
 
-// Default domain profile thresholds — per blue-team-autonomous-defense.md spec.
-// These should be overridden by calibration/{domain}-profile.json when available.
-// Fixed literals are a known limitation; profile-based config is the target state.
-const DEFAULT_PROFILE = {
-  watchThreshold:  0.05,   // shatter below = false alarm
-  alarmThreshold:  0.15,   // shatter above = threat intake opens (enforce mode only)
-  slopQueryCutoff: 0.85,   // cosine above = slop-canon match
+// Fallback profile — used only when calibration/{domain}-profile.json is absent.
+// These literals are intentionally conservative (wide) to avoid false positives
+// during initial deployment. The real thresholds come from domain profiles.
+const FALLBACK_PROFILE = {
+  watchThreshold:  1.30,   // p90 of typical canonical spread
+  alarmThreshold:  1.45,   // p90 + 1.5σ for most domains
+  slopQueryCutoff: 0.85,   // cosine space — domain-independent
 };
 
 // File extensions monitored by Channel A
@@ -135,11 +137,14 @@ async function assessGeometry(
     return;
   }
 
+  // Load calibrated domain profile (falls back to conservative defaults if absent)
+  const profile = loadDomainProfile(domain);
+
   let vec: number[];
   try {
     vec = await embed(text);
-  } catch (err: any) {
-    console.error(`[watchdog] embed failed for ${source}: ${err.message}`);
+  } catch (err: unknown) {
+    console.error(`[watchdog] embed failed for ${source}: ${err instanceof Error ? err.message : String(err)}`);
     return;
   }
 
@@ -147,13 +152,13 @@ async function assessGeometry(
 
   // Channel C: slop-canon check on every embed
   const slop = await querySlopCanon(vec);
-  if (slop && slop.score >= DEFAULT_PROFILE.slopQueryCutoff) {
+  if (slop && slop.score >= (profile.slopQueryCutoff ?? FALLBACK_PROFILE.slopQueryCutoff)) {
     logEvent({
       timestamp: new Date().toISOString(),
       mode,
       channel: "C-slop-canon",
-      file: channel === "A-filesystem" ? source : undefined,
-      intent: channel === "B-execution" ? source : undefined,
+      file:    channel === "A-filesystem" ? source : undefined,
+      intent:  channel === "B-execution"  ? source : undefined,
       shatter,
       slopScore: slop.score,
       severity: "alarm",
@@ -163,25 +168,41 @@ async function assessGeometry(
   }
 
   const severity: WatchdogEvent["severity"] =
-    shatter >= DEFAULT_PROFILE.alarmThreshold ? "alarm"
-    : shatter >= DEFAULT_PROFILE.watchThreshold ? "watch"
+    shatter >= profile.alarmThreshold ? "alarm"
+    : shatter >= profile.watchThreshold ? "watch"
     : "clean";
+
+  const action: WatchdogEvent["action"] =
+    mode === "enforce" && severity === "alarm" ? "held" : "logged";
 
   logEvent({
     timestamp: new Date().toISOString(),
     mode,
     channel,
-    file:   channel === "A-filesystem" ? source : undefined,
-    intent: channel === "B-execution"  ? source : undefined,
+    file:    channel === "A-filesystem" ? source : undefined,
+    intent:  channel === "B-execution"  ? source : undefined,
     shatter,
     severity,
-    action: "logged",  // observer mode: always logged, never held
+    action,
     detail: severity === "alarm"
-      ? `shatter ${shatter.toFixed(4)} > alarm threshold ${DEFAULT_PROFILE.alarmThreshold} — threat intake would open in enforce mode`
+      ? `shatter ${shatter.toFixed(4)} > alarm ${profile.alarmThreshold}${mode === "observe" ? " — threat intake would open in enforce mode" : ""}`
       : severity === "watch"
-      ? `shatter ${shatter.toFixed(4)} > watch threshold ${DEFAULT_PROFILE.watchThreshold}`
+      ? `shatter ${shatter.toFixed(4)} > watch ${profile.watchThreshold}`
       : undefined,
   });
+
+  // In enforce mode, open threat intake + defense writer on alarms
+  if (mode === "enforce" && severity === "alarm") {
+    console.log(`[watchdog] ALARM — opening threat intake for ${source}`);
+    try {
+      const report = await runThreatIntake(text, domain);
+      if (report.classification !== "FALSE_ALARM") {
+        await writeDefense(report);
+      }
+    } catch (err: unknown) {
+      console.error(`[watchdog] threat intake failed: ${err instanceof Error ? err.message : String(err)}`);
+    }
+  }
 }
 
 // ─────────────────────────────────────────────────────────────────
@@ -263,10 +284,11 @@ function startExecutionIntercept(domain: Domain, mode: WatchdogMode): void {
         return;
       }
 
-      const shatter = computeShatter(vec, centroid);
+      const shatter  = computeShatter(vec, centroid);
+      const profile  = loadDomainProfile(intentDomain);
       const severity: WatchdogEvent["severity"] =
-        shatter >= DEFAULT_PROFILE.alarmThreshold ? "alarm"
-        : shatter >= DEFAULT_PROFILE.watchThreshold ? "watch"
+        shatter >= profile.alarmThreshold ? "alarm"
+        : shatter >= profile.watchThreshold ? "watch"
         : "clean";
 
       // Observer mode: always proceed, log the geometry

@@ -1,0 +1,11 @@
+{
+  "domain": "source-audit",
+  "calibratedAt": "2026-05-22",
+  "canonicalCount": 179,
+  "shatterP90": 1.2754,
+  "shatterStdev": 0.0572,
+  "watchThreshold": 1.2754,
+  "alarmThreshold": 1.3611,
+  "slopQueryCutoff": 0.85,
+  "notes": "watchThreshold = p90 of canonical shatter spread (files outside normal range). alarmThreshold = p90 + 1.5σ (clearly anomalous — threat intake opens). slopQueryCutoff is cosine space (0–1), independent of shatter geometry. Recalibrate after each major ingest batch."
+}

@@ -18,7 +18,9 @@
     "ci": "npm run test && npm run integrity",
     "promote": "npm run ci && echo 'CI gate passed — terrain is promotion-ready'",
     "watchdog": "tsx engine/watchdog.ts --mode observe",
-    "watchdog:enforce": "tsx engine/watchdog.ts --mode enforce"
+    "watchdog:enforce": "tsx engine/watchdog.ts --mode enforce",
+    "threat-intake": "tsx engine/threat-intake.ts",
+    "defense-writer": "tsx engine/defense-writer.ts"
   },
   "dependencies": {
     "zod": "^3.25.76"
