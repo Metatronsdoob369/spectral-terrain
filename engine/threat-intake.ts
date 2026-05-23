@@ -24,9 +24,19 @@
 import { existsSync, readFileSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
-import { embed, computeShatter } from "./embed.js";
+import { embed, buildPlaceholderVector, computeShatter } from "./embed.js";
 import { loadCentroid } from "./calibrate.js";
+import { DOMAIN_GEOMETRY } from "../contracts/terrain.contract.js";
 import type { Domain } from "../contracts/terrain.contract.js";
+
+async function embedForDomain(text: string, domain: Domain): Promise<number[]> {
+  const geometry = DOMAIN_GEOMETRY[domain];
+  if (geometry?.temporal) {
+    const tv = await buildPlaceholderVector(text);
+    return tv.concat;
+  }
+  return embed(text);
+}
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -212,7 +222,7 @@ export async function runThreatIntake(
   // 2. Embed artifact
   let artifactVec: number[];
   try {
-    artifactVec = await embed(artifactText);
+    artifactVec = await embedForDomain(artifactText, domain);
   } catch (err: unknown) {
     throw new Error(`[threat-intake] embed failed: ${err instanceof Error ? err.message : String(err)}`);
   }

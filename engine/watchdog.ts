@@ -33,11 +33,27 @@ import { readFileSync, existsSync, writeFileSync, mkdirSync } from "fs";
 import { join, extname, relative, dirname } from "path";
 import { fileURLToPath } from "url";
 import { createServer } from "http";
-import { embed, computeShatter } from "./embed.js";
+import { embed, buildPlaceholderVector, computeShatter } from "./embed.js";
 import { loadCentroid } from "./calibrate.js";
 import { loadDomainProfile, runThreatIntake } from "./threat-intake.js";
 import { writeDefense } from "./defense-writer.js";
+import { DOMAIN_GEOMETRY } from "../contracts/terrain.contract.js";
 import type { Domain } from "../contracts/terrain.contract.js";
+
+/**
+ * Embed text with the correct dimensionality for the domain.
+ * Temporal domains (roblox-luau, finance-crypto): buildPlaceholderVector → 3072-D concat [v|v|v]
+ * Static domains (source-audit, general, memory): embed() → 1024-D
+ * This must match the vector dim used during ingest/calibrate, otherwise computeShatter throws.
+ */
+async function embedForDomain(text: string, domain: Domain): Promise<number[]> {
+  const geometry = DOMAIN_GEOMETRY[domain];
+  if (geometry?.temporal) {
+    const tv = await buildPlaceholderVector(text);
+    return tv.concat;
+  }
+  return embed(text);
+}
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -142,7 +158,7 @@ async function assessGeometry(
 
   let vec: number[];
   try {
-    vec = await embed(text);
+    vec = await embedForDomain(text, domain);
   } catch (err: unknown) {
     console.error(`[watchdog] embed failed for ${source}: ${err instanceof Error ? err.message : String(err)}`);
     return;
@@ -277,7 +293,7 @@ function startExecutionIntercept(domain: Domain, mode: WatchdogMode): void {
       }
 
       let vec: number[];
-      try { vec = await embed(intentText); }
+      try { vec = await embedForDomain(intentText, intentDomain); }
       catch (err: any) {
         res.writeHead(200);
         res.end(JSON.stringify({ action: "proceed", detail: `embed failed: ${err.message}` }));
