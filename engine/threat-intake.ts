@@ -229,6 +229,12 @@ export async function runThreatIntake(
 
   // 3. Shatter check against domain centroid
   const centroid = loadCentroid(domain)!;
+  if (artifactVec.length !== centroid.length) {
+    throw new Error(
+      `[threat-intake] Centroid dimension mismatch for ${domain}: vec=${artifactVec.length} centroid=${centroid.length}. ` +
+      `Run npm run calibrate -- --domain ${domain} after ingesting source-audit corpus.`
+    );
+  }
   const shatter  = computeShatter(artifactVec, centroid);
 
   // 4. Classify

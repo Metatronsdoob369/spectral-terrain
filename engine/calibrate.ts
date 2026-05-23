@@ -13,10 +13,12 @@ import { writeFileSync, readFileSync, existsSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import type { Domain, Centroid } from "../contracts/terrain.contract.js";
+import { DOMAIN_GEOMETRY } from "../contracts/terrain.contract.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const QDRANT_URL = "http://127.0.0.1:6340";
 const HEATMAP_COLLECTION = "spectral-heatmap";
+const HEATMAP_1024_COLLECTION = "spectral-heatmap-1024";
 
 // ─────────────────────────────────────────────────────────────────
 // LOAD CENTROID (used by query.ts and ingest.ts)
@@ -36,6 +38,9 @@ async function fetchCanonicalVectors(domain: Domain): Promise<number[][]> {
   const vectors: number[][] = [];
   let offset: string | null = null;
 
+  // Route to the correct collection based on domain geometry
+  const collection = DOMAIN_GEOMETRY[domain].temporal ? HEATMAP_COLLECTION : HEATMAP_1024_COLLECTION;
+
   while (true) {
     const body: any = {
       limit: 100,
@@ -50,7 +55,7 @@ async function fetchCanonicalVectors(domain: Domain): Promise<number[][]> {
     };
     if (offset) body.offset = offset;
 
-    const res = await fetch(`${QDRANT_URL}/collections/${HEATMAP_COLLECTION}/points/scroll`, {
+    const res = await fetch(`${QDRANT_URL}/collections/${collection}/points/scroll`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
@@ -100,7 +105,8 @@ function computeStability(newCentroid: number[], oldCentroid: number[] | null): 
 // ─────────────────────────────────────────────────────────────────
 
 export async function calibrate(domain: Domain): Promise<Centroid> {
-  console.log(`\n🔬 Calibrating Diamond-Stable centroid for domain: ${domain}`);
+  const collection = DOMAIN_GEOMETRY[domain].temporal ? HEATMAP_COLLECTION : HEATMAP_1024_COLLECTION;
+  console.log(`\n🔬 Calibrating Diamond-Stable centroid for domain: ${domain} (collection: ${collection})`);
 
   const vectors = await fetchCanonicalVectors(domain);
   if (vectors.length < 5) {

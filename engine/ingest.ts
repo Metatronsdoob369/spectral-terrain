@@ -25,7 +25,8 @@ import { validateLabel, printLabelAuditSummary } from "./label-validator.js";
 import { runDriftSidecar } from "./drift-sidecar.js";
 
 const QDRANT_URL = "http://127.0.0.1:6340";
-const HEATMAP_COLLECTION = "spectral-heatmap";
+const HEATMAP_COLLECTION = "spectral-heatmap";         // 3072-D temporal domains
+const HEATMAP_1024_COLLECTION = "spectral-heatmap-1024"; // 1024-D static domains
 
 const DOMAIN_EXTENSIONS: Record<Domain, string[]> = {
   "roblox-luau":    [".lua", ".luau"],
@@ -39,18 +40,22 @@ const DOMAIN_EXTENSIONS: Record<Domain, string[]> = {
 // ENSURE COLLECTION EXISTS
 // ─────────────────────────────────────────────────────────────────
 
-async function ensureCollection() {
-  const res = await fetch(`${QDRANT_URL}/collections/${HEATMAP_COLLECTION}`, { method: "GET" });
+async function ensureCollection(domain: Domain) {
+  const geometry = DOMAIN_GEOMETRY[domain];
+  const collection = geometry.temporal ? HEATMAP_COLLECTION : HEATMAP_1024_COLLECTION;
+  const dim = geometry.dim;
+
+  const res = await fetch(`${QDRANT_URL}/collections/${collection}`, { method: "GET" });
   if (res.ok) return;
 
-  await fetch(`${QDRANT_URL}/collections/${HEATMAP_COLLECTION}`, {
+  await fetch(`${QDRANT_URL}/collections/${collection}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      vectors: { size: 3072, distance: "Cosine" },
+      vectors: { size: dim, distance: "Cosine" },
     }),
   });
-  console.log(`✅ Created Qdrant collection: ${HEATMAP_COLLECTION}`);
+  console.log(`✅ Created Qdrant collection: ${collection} (dim=${dim})`);
 }
 
 // ─────────────────────────────────────────────────────────────────
@@ -104,7 +109,8 @@ function walkRepo(rootPath: string, extensions: string[]): string[] {
 // ─────────────────────────────────────────────────────────────────
 
 async function upsertPoint(point: TerrainPoint, vector: number[]) {
-  const res = await fetch(`${QDRANT_URL}/collections/${HEATMAP_COLLECTION}/points`, {
+  const collection = DOMAIN_GEOMETRY[point.domain].temporal ? HEATMAP_COLLECTION : HEATMAP_1024_COLLECTION;
+  const res = await fetch(`${QDRANT_URL}/collections/${collection}/points`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -220,7 +226,7 @@ function extractGameState(source: string, fileName: string): GameState | null {
 export async function ingestRepo(repoPath: string, domain: Domain, markAsCanonical = false) {
   await waitForOllama();
   await acquireLock();
-  await ensureCollection();
+  await ensureCollection(domain);
 
   const extensions = DOMAIN_EXTENSIONS[domain];
   const files = walkRepo(repoPath, extensions);

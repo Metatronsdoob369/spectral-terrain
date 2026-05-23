@@ -164,6 +164,10 @@ async function assessGeometry(
     return;
   }
 
+  if (vec.length !== centroid.length) {
+    console.warn(`[watchdog] Centroid dimension mismatch for ${domain}: vec=${vec.length} centroid=${centroid.length} — skipping geometry check`);
+    return;
+  }
   const shatter = computeShatter(vec, centroid);
 
   // Channel C: slop-canon check on every embed
@@ -269,7 +273,7 @@ const INTERCEPT_PORT = 7340;
 function startExecutionIntercept(domain: Domain, mode: WatchdogMode): void {
   const server = createServer(async (req, res) => {
     if (req.method !== "POST" || req.url !== "/intercept") {
-      res.writeHead(404); res.end(); return;
+      res.writeHead(404, { "Connection": "close" }); res.end(); return;
     }
 
     let body = "";
@@ -277,7 +281,7 @@ function startExecutionIntercept(domain: Domain, mode: WatchdogMode): void {
     req.on("end", async () => {
       let payload: { tool?: string; args?: unknown; code_to_write?: string; domain?: Domain };
       try { payload = JSON.parse(body); } catch {
-        res.writeHead(400); res.end(JSON.stringify({ error: "invalid JSON" })); return;
+        res.writeHead(400, { "Connection": "close" }); res.end(JSON.stringify({ error: "invalid JSON" })); return;
       }
 
       // Embed the intent — prefer code_to_write, fall back to JSON stringification
@@ -287,7 +291,7 @@ function startExecutionIntercept(domain: Domain, mode: WatchdogMode): void {
 
       const centroid = loadCentroid(intentDomain);
       if (!centroid) {
-        res.writeHead(200);
+        res.writeHead(200, { "Connection": "close" });
         res.end(JSON.stringify({ action: "proceed", detail: `no centroid for ${intentDomain}` }));
         return;
       }
@@ -295,11 +299,16 @@ function startExecutionIntercept(domain: Domain, mode: WatchdogMode): void {
       let vec: number[];
       try { vec = await embedForDomain(intentText, intentDomain); }
       catch (err: any) {
-        res.writeHead(200);
+        res.writeHead(200, { "Connection": "close" });
         res.end(JSON.stringify({ action: "proceed", detail: `embed failed: ${err.message}` }));
         return;
       }
 
+      if (vec.length !== centroid.length) {
+        res.writeHead(200, { "Connection": "close" });
+        res.end(JSON.stringify({ action: "proceed", detail: `centroid dim mismatch: vec=${vec.length} centroid=${centroid.length} — recalibrate ${intentDomain}` }));
+        return;
+      }
       const shatter  = computeShatter(vec, centroid);
       const profile  = loadDomainProfile(intentDomain);
       const severity: WatchdogEvent["severity"] =
@@ -323,7 +332,7 @@ function startExecutionIntercept(domain: Domain, mode: WatchdogMode): void {
           : undefined,
       });
 
-      res.writeHead(200);
+      res.writeHead(200, { "Connection": "close" });
       res.end(JSON.stringify({
         action:   action === "held" ? "hold" : "proceed",
         shatter,
@@ -332,6 +341,11 @@ function startExecutionIntercept(domain: Domain, mode: WatchdogMode): void {
       }));
     });
   });
+
+  // Embed calls take 10–45s per request; default keepAliveTimeout (5s) closes
+  // the connection before the response is ready. Set to 120s.
+  server.keepAliveTimeout = 120_000;
+  server.headersTimeout   = 125_000;
 
   server.listen(INTERCEPT_PORT, () => {
     console.log(`[watchdog] Channel B — execution intercept listening on :${INTERCEPT_PORT}`);
