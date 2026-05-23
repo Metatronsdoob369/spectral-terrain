@@ -24,7 +24,8 @@
     "circadian": "tsx engine/circadian.ts",
     "circadian:audit": "tsx engine/circadian.ts --domain source-audit",
     "canary": "tsx engine/canary-enforce.ts --count 30 --domain roblox-luau",
-    "canary:audit": "tsx engine/canary-enforce.ts --count 30 --domain source-audit"
+    "canary:audit": "tsx engine/canary-enforce.ts --count 30 --domain source-audit",
+    "query-server": "tsx engine/query-server.ts"
   },
   "dependencies": {
     "zod": "^3.25.76"
