@@ -1,0 +1,258 @@
+{
+  "timestamp": "2026-05-23T00:00:34.194Z",
+  "domain": "roblox-luau",
+  "totalSent": 39,
+  "clean": 38,
+  "watch": 1,
+  "alarm": 0,
+  "alarmRatePct": 0,
+  "hold": 0,
+  "errors": 0,
+  "defenseArtifacts": {
+    "total": 0,
+    "selfCheckPass": 0,
+    "selfCheckFail": 0
+  },
+  "gates": {
+    "gate1": true,
+    "gate2": true,
+    "gate3": true,
+    "allGreen": true
+  },
+  "results": [
+    {
+      "file": "corpus/ai-generated/AssetLibrary_bc68e9cc.lua",
+      "action": "proceed",
+      "shatter": 1.180443490506861,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/AssetLibrary_e296f8f3.lua",
+      "action": "proceed",
+      "shatter": 1.2102029892484727,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/AtmosphereManager_09772169.lua",
+      "action": "proceed",
+      "shatter": 1.1375531083165769,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/AtmosphereManager_253428c5.lua",
+      "action": "proceed",
+      "shatter": 1.0834306475444027,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/AtmosphereManager_75e890d9.lua",
+      "action": "proceed",
+      "shatter": 1.1727149998021844,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/AtmosphereManager_7a876ca2.lua",
+      "action": "proceed",
+      "shatter": 1.1337196742851274,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/AtmosphereManager_b55c5f11.lua",
+      "action": "proceed",
+      "shatter": 1.151497376672152,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/AudioManager_eea6ed85.lua",
+      "action": "proceed",
+      "shatter": 1.1631396613220015,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/DataStoreHandler_b9f01843.lua",
+      "action": "proceed",
+      "shatter": 1.1780566711106573,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/MaterialService_1e9a1e7c.lua",
+      "action": "proceed",
+      "shatter": 1.1637089416176751,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/MaterialService_74588921.lua",
+      "action": "proceed",
+      "shatter": 1.230455780106526,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/MonetizationBridge_d88ff4fa.lua",
+      "action": "proceed",
+      "shatter": 1.267445472190152,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/NetworkBridge_3564beeb.lua",
+      "action": "proceed",
+      "shatter": 1.2335967356612527,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/PetSystem_0a4e84fe.lua",
+      "action": "proceed",
+      "shatter": 1.12073214333444,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/PlayerAbilities_6dc44ebf.lua",
+      "action": "proceed",
+      "shatter": 1.1603077945602163,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/PrestigeHandler_d9276124.lua",
+      "action": "proceed",
+      "shatter": 1.1418986260367963,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/ResourceManager_1321728d.lua",
+      "action": "proceed",
+      "shatter": 1.2424637208537896,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/ShopInterface_f40dcf42.lua",
+      "action": "proceed",
+      "shatter": 1.1036394008437864,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/SignageManager_171f89aa.lua",
+      "action": "proceed",
+      "shatter": 1.0787316980116815,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/SignageManager_d0b2d52c.lua",
+      "action": "proceed",
+      "shatter": 1.13804257569086,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/SignageManager_d7043d39.lua",
+      "action": "proceed",
+      "shatter": 1.2189875019804797,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/SimulatorCore_7a32a81b.lua",
+      "action": "proceed",
+      "shatter": 1.1127544184837157,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/StatManager_ee4d6670.lua",
+      "action": "proceed",
+      "shatter": 1.1166080157176794,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/StreetGenerator_22a4702a.lua",
+      "action": "proceed",
+      "shatter": 1.1025208116454646,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/StreetGenerator_34ba685a.lua",
+      "action": "proceed",
+      "shatter": 1.084289754332963,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/StreetGenerator_e4539c24.lua",
+      "action": "proceed",
+      "shatter": 1.1094343830846305,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/StructureGenerator_4a51aeff.lua",
+      "action": "proceed",
+      "shatter": 1.186429536949553,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/StructureGenerator_ebe280e3.lua",
+      "action": "proceed",
+      "shatter": 1.1323726665945257,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/TagGameClient_0e674dc5.lua",
+      "action": "proceed",
+      "shatter": 1.152027709545493,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/TagManager_aad863b4.lua",
+      "action": "proceed",
+      "shatter": 1.3299818971272164,
+      "severity": "watch"
+    },
+    {
+      "file": "corpus/ai-generated/TowerGenerator_1c21f64f.lua",
+      "action": "proceed",
+      "shatter": 1.1138358825140628,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/TowerGenerator_74b216e4.lua",
+      "action": "proceed",
+      "shatter": 1.1001525544020987,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/TrafficController_9ebd5608.lua",
+      "action": "proceed",
+      "shatter": 1.1201723535000288,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/TrafficController_ecdf0ba8.lua",
+      "action": "proceed",
+      "shatter": 1.1111945788648048,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/TycoonController_f2b2fe42.lua",
+      "action": "proceed",
+      "shatter": 1.2370694344268363,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/UpgradeSystem_76635673.lua",
+      "action": "proceed",
+      "shatter": 1.1956771427620132,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/VisualEffectService_2209301f.lua",
+      "action": "proceed",
+      "shatter": 1.204207555426224,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/e2947840-710a-4815-a136-099f5d69c6d0_4cbb102d.lua",
+      "action": "proceed",
+      "shatter": 1.2008126466250157,
+      "severity": "clean"
+    },
+    {
+      "file": "corpus/ai-generated/scripting_d49226b1.lua",
+      "action": "proceed",
+      "shatter": 1.0920048812961045,
+      "severity": "clean"
+    }
+  ]
+}
