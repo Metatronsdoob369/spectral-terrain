@@ -27,9 +27,10 @@ The pipeline transforms raw domain state into geometric terrain that an agent ca
 * **Code Location:** `domains/finance-crypto-tplus1.ts`.
 
 ### 4. REFRAG (Spatial Compression)
-* **Takes in:** Raw high-dimensional embeddings (e.g., 1024-D or 3072-D concatenated vectors).
+* **Takes in:** Raw per-timestep embeddings (e.g., 1024-D), before concatenation.
 * **Puts out:** A spatially compressed vector (select-k width reduction). This is where the 640-D finance target (512-D base + 128-D delta) lives.
-* **Code Location:** `brain/indexer/refrag-compressor.ts`.
+* **Code Location:** `engine/embed.ts` (`refragSelectK`); original implementation in WhiteGlove's `brain/indexer/refrag-compressor.ts`.
+* **Status (verified against code, 2026-07-09):** implemented but **not wired into the live v1.0 path** — `scripts/refinery-finance.ts` → `buildTemporalVector()` concatenates raw embeddings and upserts `tv.concat` (3072-D) directly, per Locked Decision #1. `refragSelectK` has no callers yet. When wired, it applies per-timestep pre-concat toward the 640-D target.
 
 ### 5. Temporal-Concat
 * **Takes in:** Individual embeddings for the timeline (`t_minus1`, `t_now`, `t_plus1`).
@@ -64,4 +65,4 @@ The following architectural decisions are locked. They have been decided in vari
 5. **Execution Architecture:** The refinery is a scheduled script (LaunchAgent at 00:30), *not* a daemon. It runs once per circadian cycle, processes the daily delta, packs it, and exits.
 6. **Domain Separation:** The terrain engine is strictly domain-agnostic. All domain-specific knowledge (what a liquidity pool is, how to parse it) is isolated in `domains/finance-crypto/`.
 7. **Canonical Finance Points:** A financial pool state is considered "canonical" only if it is observed across ≥5 daily snapshots, maintains a shatter score < 0.05 relative to the rolling centroid, and has no CVE flags.
-8. **Static vs Temporal Geometry Enforcement:** Temporal 3072-D geometry (`[v_t-1 | v_t | v_t+1]`) is ONLY used for domains with state progression (e.g., `roblox-luau`, `finance-crypto`). Static domains (`source-audit`, `general`, `memory`, `reddit`) strictly use a single 1024-D vector. This is a contract rule, not a configuration preference.
+8. **Static vs Temporal Geometry Enforcement:** Temporal 3072-D geometry (`[v_t-1 | v_t | v_t+1]`) is ONLY used for domains with state progression (e.g., `roblox-luau`, `finance-crypto`). Static domains (`source-audit`, `general`, `memory`, `reddit`) strictly use a single embedding vector — **1024-D today** (mxbai native), **768-D target** post-`NOMIC_768_PRIMARY` cutover, matching the domain manifest's `maxStaticDims: 768` (target-state wins the docs). Pre-cutover static pipelines flagging HOT under `auditDimensions()` is **intended**: it reads "scheduled migration, not yet cut over" — not "broken." This is a contract rule, not a configuration preference.
