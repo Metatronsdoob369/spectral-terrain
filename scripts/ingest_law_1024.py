@@ -26,7 +26,7 @@ from pathlib import Path
 
 import requests
 
-QDRANT_URL  = "http://100.113.215.46:6333"
+QDRANT_URL  = os.environ.get("QDRANT_PI_URL", "http://127.0.0.1:6333")
 OLLAMA_URL  = "http://127.0.0.1:11434"
 EMBED_MODEL = "mxbai-embed-large"
 COLLECTION  = "law-heatmap-1024"
