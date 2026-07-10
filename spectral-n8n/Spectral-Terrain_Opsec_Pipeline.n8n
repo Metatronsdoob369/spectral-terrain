@@ -1,0 +1,302 @@
+{
+  "updatedAt": "2026-06-08T09:45:48.734Z",
+  "createdAt": "2026-06-08T07:27:47.641Z",
+  "id": "ckdB1yKg0tA1Xtv7",
+  "name": "Spectral-Terrain Opsec Pipeline",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ingest-opsec-payload",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "5ba87cd8-193a-4ebd-b086-a9428bd89530",
+      "name": "Webhook (Ingest Payload)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -448,
+        160
+      ],
+      "webhookId": "f175fe0e-d375-4315-877a-8fd3d5121c16"
+    },
+    {
+      "parameters": {
+        "jsCode": "let rawPayload = '';\nlet domain = 'source-audit';\n\nif (items[0] && items[0].json && items[0].json.body) {\n  rawPayload = JSON.stringify(items[0].json.body);\n  if (items[0].json.body.domain) {\n    domain = items[0].json.body.domain;\n  }\n} else if (items[0] && items[0].json) {\n  rawPayload = JSON.stringify(items[0].json);\n}\n\nreturn [{\n  json: {\n    payload: rawPayload,\n    domain: domain\n  }\n}];"
+      },
+      "id": "ad557a91-4ab0-4bb8-a1c5-89bfb3c4902e",
+      "name": "Format Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -256,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3001/post",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Threat-Domain",
+              "value": "={{ $json.domain }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "data",
+              "value": "={{ $json.payload }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "70f279c9-ff38-4b8c-9077-5fbf2526308d",
+      "name": "Query Lab Server",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -48,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.geometricAudit.classification }}",
+                    "rightValue": "THREAT",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "219fad1a-7a96-4e90-a20f-8f25b9ec3a45"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.geometricAudit.classification }}",
+                    "rightValue": "WATCH",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "ab191773-6165-4060-8fa0-6a03fda45147"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.geometricAudit.classification }}",
+                    "rightValue": "Write_SAFE",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "c16c889e-a13d-4ab0-99f9-cf66378fe94e"
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "28ceb5b9-895e-466b-beff-79a3d5094c73",
+      "name": "Route by Threat Level",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        176,
+        128
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "={{ '/Users/joewales/spectral-terrain/corpus/quarantine/threat_' + $now.toFormat('yyyy-MM-dd_HHmmss') + '.json' }}",
+        "dataPropertyName": "parsedData",
+        "options": {}
+      },
+      "id": "6558e3fd-8978-4460-b3f2-5c526238c667",
+      "name": "Write THREAT",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        400,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "={{ '/Users/joewales/spectral-terrain/corpus/quarantine/watch_' + $now.toFormat('yyyy-MM-dd_HHmmss') + '.json' }}",
+        "dataPropertyName": "parsedData",
+        "options": {}
+      },
+      "id": "2a6c45a7-3043-4d6e-9e1f-26ee337847d9",
+      "name": "Write WATCH",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        400,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "={{ '/Users/joewales/spectral-terrain/corpus/ai-generated/safe_' + $now.toFormat('yyyy-MM-dd_HHmmss') + '.json' }}",
+        "dataPropertyName": "parsedData",
+        "options": {}
+      },
+      "id": "d4524fc5-acbb-4abd-a19a-4f4816ae9134",
+      "name": "Write SAFE",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        400,
+        352
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook (Ingest Payload)": {
+      "main": [
+        [
+          {
+            "node": "Format Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Payload": {
+      "main": [
+        [
+          {
+            "node": "Query Lab Server",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Query Lab Server": {
+      "main": [
+        [
+          {
+            "node": "Route by Threat Level",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Threat Level": {
+      "main": [
+        [
+          {
+            "node": "Write THREAT",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Write WATCH",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Write SAFE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "meta": null,
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "25351bc5-10ee-4d0b-bfaf-5938669b8e7d",
+  "activeVersionId": null,
+  "versionCounter": 12,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-06-08T07:27:47.643Z",
+      "createdAt": "2026-06-08T07:27:47.643Z",
+      "role": "workflow:owner",
+      "workflowId": "ckdB1yKg0tA1Xtv7",
+      "projectId": "AgGphZRiuvUhtWhg",
+      "project": {
+        "updatedAt": "2025-12-17T22:37:15.214Z",
+        "createdAt": "2025-12-17T22:19:32.091Z",
+        "id": "AgGphZRiuvUhtWhg",
+        "name": "Preston Hooten <phooten4@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "creatorId": "c8230f71-b0e6-46d5-8578-674ce79832ba"
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": null
+}

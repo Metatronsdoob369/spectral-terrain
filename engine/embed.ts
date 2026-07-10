@@ -9,9 +9,12 @@
 
 import type { TemporalVector } from "../contracts/terrain.contract.js";
 
-const OLLAMA_URL = "http://127.0.0.1:11434";
-const EMBED_MODEL = "mxbai-embed-large";
-const EMBED_DIM = 1024;
+const OLLAMA_URL = process.env.OLLAMA_URL || "http://127.0.0.1:11434";
+const EMBED_MODEL = process.env.EMBED_MODEL || "mxbai-embed-large";
+const EMBED_DIM = parseInt(process.env.EMBED_DIM || "1024", 10);
+const EMBED_PROVIDER = process.env.EMBED_PROVIDER || "ollama"; // ollama | hf
+const HF_API_URL = process.env.HF_API_URL || "https://api-inference.huggingface.co/pipeline/feature-extraction";
+const HF_TOKEN = process.env.HF_TOKEN;
 
 // ─────────────────────────────────────────────────────────────────
 // CORE EMBEDDER
@@ -50,14 +53,39 @@ function sanitizeForEmbed(text: string): string {
 
 async function embedChunk(text: string): Promise<number[]> {
   const safe = sanitizeForEmbed(text);
+  if (EMBED_PROVIDER === "hf") {
+    return embedChunkHF(safe);
+  }
+  return embedChunkOllama(safe);
+}
+
+async function embedChunkOllama(text: string): Promise<number[]> {
   const res = await fetch(`${OLLAMA_URL}/api/embed`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ model: EMBED_MODEL, input: safe }),
+    body: JSON.stringify({ model: EMBED_MODEL, input: text }),
   });
   if (!res.ok) throw new Error(`Ollama embed failed: ${res.statusText}`);
   const data = await res.json() as { embeddings: number[][] };
   const vec = data.embeddings[0];
+  if (vec.length !== EMBED_DIM) throw new Error(`Expected ${EMBED_DIM}-D, got ${vec.length}-D`);
+  return l2Normalize(vec);
+}
+
+async function embedChunkHF(text: string): Promise<number[]> {
+  if (!HF_TOKEN) throw new Error("HF_TOKEN not set");
+  const res = await fetch(`${HF_API_URL}/${EMBED_MODEL}`, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${HF_TOKEN}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ inputs: text }),
+  });
+  if (!res.ok) throw new Error(`HF embed failed: ${res.status} ${res.statusText}`);
+  const data = await res.json() as number[] | number[][];
+  // HF returns either [number[]] for single input or number[] directly
+  const vec = Array.isArray(data[0]) ? (data as number[][])[0] : (data as number[]);
   if (vec.length !== EMBED_DIM) throw new Error(`Expected ${EMBED_DIM}-D, got ${vec.length}-D`);
   return l2Normalize(vec);
 }

@@ -1,0 +1,77 @@
+{
+  "info": {
+    "name": "Spectral Terrain Opsec Lab",
+    "description": "API collection for testing the local geometric-gate and n8n ingestion pipeline using Atom8n Thor Client.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Direct Lab Server (Port 3001)",
+      "item": [
+        {
+          "name": "Safe Telemetry (Roblox Physics)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-Threat-Domain", "value": "roblox-luau" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"data\":\"print(\\\"Hello Roblox! Safe physics telemetry check.\\\")\"}"
+            },
+            "url": { "raw": "http://localhost:3001/post", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["post"] }
+          }
+        },
+        {
+          "name": "High Heat Payload (Naked Threat)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-Threat-Domain", "value": "source-audit" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"data\":\"require(\\\"child_process\\\").exec(\\\"rm -rf /*\\\"); // high heat test\"}"
+            },
+            "url": { "raw": "http://localhost:3001/post", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["post"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "n8n Ingestion Pipeline (Port 5678)",
+      "item": [
+        {
+          "name": "Safe Telemetry Pipeline Test",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"domain\": \"roblox-luau\",\n  \"data\": \"print(\\\"Hello Roblox! Routing through n8n pipeline.\\\")\"\n}"
+            },
+            "url": { "raw": "http://localhost:5678/webhook-test/ingest-opsec-payload", "protocol": "http", "host": ["localhost"], "port": "5678", "path": ["webhook-test", "ingest-opsec-payload"] }
+          }
+        },
+        {
+          "name": "High Heat Pipeline Test",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"domain\": \"source-audit\",\n  \"data\": \"require(\\\"child_process\\\").exec(\\\"rm -rf /*\\\"); // high heat test\"\n}"
+            },
+            "url": { "raw": "http://localhost:5678/webhook-test/ingest-opsec-payload", "protocol": "http", "host": ["localhost"], "port": "5678", "path": ["webhook-test", "ingest-opsec-payload"] }
+          }
+        }
+      ]
+    }
+  ]
+}

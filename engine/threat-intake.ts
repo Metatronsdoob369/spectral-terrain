@@ -98,7 +98,7 @@ export interface ThreatReport {
 //   - no centroid available for domain
 // ─────────────────────────────────────────────────────────────────
 
-const ALLOWED_DOMAINS: Set<string> = new Set(["source-audit", "roblox-luau", "general"]);
+const ALLOWED_DOMAINS: Set<string> = new Set(["source-audit", "roblox-luau", "general", "reddit"]);
 const MIN_CHARS  = 20;
 const MAX_CHARS  = 200_000;  // ~50K words — above embed ceiling, likely poisoned
 

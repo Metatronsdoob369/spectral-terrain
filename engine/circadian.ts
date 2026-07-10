@@ -379,6 +379,26 @@ export async function runCircadian(domain?: Domain): Promise<CircadianReport> {
   console.log(`\n[circadian] Layer 4 hardening loop — ${timestamp}`);
   if (domain) console.log(`[circadian] Domain scope: ${domain}`);
 
+  // Pre-step: Finance refinery — runs before hardening if finance-crypto domain is in scope
+  if (!domain || domain === "finance-crypto") {
+    const todayDate = new Date().toISOString().slice(0, 10);
+    const packPath  = join(__dirname, `../store/finance-crypto-${todayDate}.jsonl`);
+    if (!existsSync(packPath)) {
+      console.log("\n[circadian] Pre-step — Finance terrain refinery");
+      const { spawnSync } = await import("child_process");
+      const result = spawnSync(
+        process.execPath,
+        ["--import", "tsx/esm", join(__dirname, "../scripts/refinery-finance.ts")],
+        { stdio: "inherit", env: { ...process.env } },
+      );
+      if (result.status !== 0) {
+        console.error("[circadian] Finance refinery failed — continuing hardening without new pack");
+      }
+    } else {
+      console.log(`\n[circadian] Pre-step — Finance pack for ${todayDate} already exists, skipping refinery`);
+    }
+  }
+
   // Step 1: Monitor drift check
   console.log("\n[circadian] Step 1 — Monitor drift check");
   const monitors = loadRecentMonitors();

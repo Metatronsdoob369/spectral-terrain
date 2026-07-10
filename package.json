@@ -25,7 +25,15 @@
     "circadian:audit": "tsx engine/circadian.ts --domain source-audit",
     "canary": "tsx engine/canary-enforce.ts --count 30 --domain roblox-luau",
     "canary:audit": "tsx engine/canary-enforce.ts --count 30 --domain source-audit",
-    "query-server": "tsx engine/query-server.ts"
+    "query-server": "tsx engine/query-server.ts",
+    "refinery:finance": "tsx scripts/refinery-finance.ts",
+    "refinery:finance:dry": "tsx scripts/refinery-finance.ts --dry-run",
+    "fetch:finance:dry": "tsx scripts/fetch-finance-snapshot.ts --dry-run",
+    "calibrate:finance": "tsx engine/calibrate.ts --domain finance-crypto",
+    "circadian:finance": "tsx engine/circadian.ts --domain finance-crypto",
+    "navigate:finance": "tsx engine/navigate-finance.ts",
+    "ingest:finance": "tsx scripts/ingest-finance-heatmap.ts",
+    "ingest:finance:dry": "tsx scripts/ingest-finance-heatmap.ts --dry-run"
   },
   "dependencies": {
     "zod": "^3.25.76"

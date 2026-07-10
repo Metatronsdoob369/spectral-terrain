@@ -1,0 +1,111 @@
+{
+  "updatedAt": "2026-06-08T09:13:57.020Z",
+  "createdAt": "2026-06-08T09:02:32.300Z",
+  "id": "wNpirugL1fTkCDA3",
+  "name": "Local DNA to LLM Fine-Tuning Pipeline",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ingest-pipeline",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "3cc7c4b4-e1d4-4400-bd3c-2b5d6fcf37dd",
+      "name": "Webhook (Upload PDF)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "f1f1aa67-9b10-4bd6-9f38-66b4d3208bda"
+    },
+    {
+      "parameters": {
+        "operation": "extract"
+      },
+      "id": "1d79ec21-7a02-442d-a0fe-675fe0ef74c5",
+      "name": "Extract PDF to Text",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "let text = \"\";\nif (items[0] && items[0].json && items[0].json.text) { text = items[0].json.text; }\nelse if (items[0] && items[0].json && items[0].json.data) { text = items[0].json.data; }\nelse { return [{ json: { error: \"No text extracted. Pass file as 'data'.\" } }]; }\n\n// --- 1. CORE ENGINE: PRE-PROCESS & CALCULATE DNA ---\nconst numChunks = 10;\nconst chunkSize = Math.max(150, Math.floor(text.length / numChunks));\nconst chapters = [];\nconst stopWords = new Set([\"the\",\"and\",\"of\",\"to\",\"a\",\"in\",\"that\",\"is\",\"was\",\"for\",\"on\",\"it\",\"as\",\"with\",\"by\",\"this\",\"are\",\"an\",\"at\",\"be\",\"or\",\"not\",\"from\",\"but\",\"which\",\"have\",\"has\"]);\n\nconst getMathDensity = (str) => {\n    const symbols = new Set(\"=+-*/<>^∑∫πθαλβγδεζηθικλμνξοπρστυφχψω∞\".split(\"\"));\n    let c = 0; for(let char of str) { if(symbols.has(char)) c++; }\n    return (str.length === 0) ? 0 : (c / (str.length / 1000));\n};\n\nlet totalMath = 0, totalHedges = 0, totalLyrical = 0;\nconst lexicalCounts = {};\n\nfor (let i = 0; i < numChunks; i++) {\n    const chunk = text.slice(i * chunkSize, Math.min((i + 1) * chunkSize, text.length));\n    if (chunk.trim().length < 50) continue;\n\n    const words = chunk.toLowerCase().replace(/[^a-z\\s]/g, \"\").split(/\\s+/).filter(w => w.length > 3 && !stopWords.has(w));\n    const counts = {};\n    words.forEach(w => counts[w] = (counts[w] || 0) + 1);\n    const topTerms = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 5).map(x => x[0]);\n\n    totalMath += getMathDensity(chunk);\n    if (chunk.toLowerCase().match(/perhaps|it seems|one could/)) totalHedges++;\n    if (chunk.toLowerCase().match(/poetry|epigraph/)) totalLyrical++;\n    topTerms.forEach(t => lexicalCounts[t] = (lexicalCounts[t] || 0) + 1);\n\n    chapters.push({\n        id: `chunk_${i+1}`,\n        text: chunk.replace(/\\s+/g, ' ').trim(),\n        terms: topTerms\n    });\n}\n\nconst avgMath = chapters.length ? totalMath / chapters.length : 0;\nlet austere = avgMath > 5 ? 0.2 : 0.6;\nlet abstract = avgMath > 5 ? 0.2 : 0.6;\nlet lyrical = totalLyrical > 0 ? 0.1 : (avgMath > 10 ? 0.9 : 0.5);\nlet certain = chapters.length > 0 ? Math.min(1.0, 0.5 + ((totalHedges / chapters.length) * 0.5)) : 0.5;\n\nconst dna = {\n    fingerprints: Object.entries(lexicalCounts).sort((a,b) => b[1] - a[1]).slice(0, 10).map(x => x[0]),\n    tone: { austere_vs_ornate: austere, abstract_vs_concrete: abstract, lyrical_vs_clinical: lyrical, certain_vs_hedged: certain }\n};\n\n// --- 2. SYNTHESIZER: BUILD INGESTABLE DATASET ---\n// Dynamically determine System Persona based on the calculated DNA\nlet systemPersona = \"helpful AI assistant\";\nif (dna.tone.lyrical_vs_clinical > 0.7 && dna.tone.austere_vs_ornate < 0.4) {\n    systemPersona = \"precise, clinical technical analyst focusing on hard facts\";\n} else if (dna.tone.lyrical_vs_clinical < 0.3) {\n    systemPersona = \"literary and creative assistant analyzing narrative structures\";\n} else if (dna.tone.certain_vs_hedged > 0.6) {\n    systemPersona = \"cautious academic researcher who qualifies all statements\";\n}\n\nconst ingestable_dataset = [];\n\nchapters.forEach(ch => {\n    if (ch.terms.length < 2) return;\n    \n    // Create OpenAI-style Fine-Tuning JSONL Messages\n    ingestable_dataset.push({\n        messages: [\n            {\n                role: \"system\", \n                content: `You are a ${systemPersona}. Base your responses strictly on the provided context.`\n            },\n            {\n                role: \"user\", \n                content: `Extract the core context regarding '${ch.terms[0]}' and '${ch.terms[1]}' from the following text: \\n\"${ch.text}\"`\n            },\n            {\n                role: \"assistant\", \n                content: `Based on the text, the discussion regarding ${ch.terms[0]} and ${ch.terms[1]} centers on the following grounded excerpt: \"${ch.text.slice(0, 150)}...\"`\n            }\n        ]\n    });\n});\n\n// Final Output: The Metadata Profile + The Ready-to-Train Dataset\nreturn [{\n    json: {\n        pipeline_status: \"success\",\n        document_dna: dna,\n        dataset_metrics: {\n            total_instruction_pairs: ingestable_dataset.length,\n            assigned_persona: systemPersona\n        },\n        fine_tuning_payload: ingestable_dataset\n    }\n}];"
+      },
+      "id": "d4fa1814-ac07-4a17-9944-fac1c793f365",
+      "name": "DNA Engine & Synthesizer",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook (Upload PDF)": {
+      "main": [
+        [
+          {
+            "node": "Extract PDF to Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract PDF to Text": {
+      "main": [
+        [
+          {
+            "node": "DNA Engine & Synthesizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "meta": null,
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "a8734a84-1c59-4134-a545-5bc23607f032",
+  "activeVersionId": null,
+  "versionCounter": 2,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-06-08T09:02:32.303Z",
+      "createdAt": "2026-06-08T09:02:32.303Z",
+      "role": "workflow:owner",
+      "workflowId": "wNpirugL1fTkCDA3",
+      "projectId": "AgGphZRiuvUhtWhg",
+      "project": {
+        "updatedAt": "2025-12-17T22:37:15.214Z",
+        "createdAt": "2025-12-17T22:19:32.091Z",
+        "id": "AgGphZRiuvUhtWhg",
+        "name": "Preston Hooten <phooten4@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "creatorId": "c8230f71-b0e6-46d5-8578-674ce79832ba"
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": null
+}

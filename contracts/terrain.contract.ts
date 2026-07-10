@@ -13,8 +13,15 @@ import { z } from "zod";
 // CORE VECTOR TYPES
 // ─────────────────────────────────────────────────────────────────
 
-/** Single 1024-D embedding from mxbai-embed-large */
-export const EmbeddingSchema = z.array(z.number()).length(1024);
+/** Single embedding from a local Ollama embedder. Default length 1024 for mxbai-embed-large, override via EMBED_DIM env var. */
+const EMBED_DIM = (() => {
+  const env = typeof process !== "undefined" && process.env?.EMBED_DIM ? parseInt(process.env.EMBED_DIM, 10) : 1024;
+  return Number.isFinite(env) && env > 0 ? env : 1024;
+})();
+
+export const EmbeddingSchema = z.array(z.number()).length(EMBED_DIM);
+
+const DIM_3072 = EMBED_DIM * 3;
 
 /**
  * Temporal 3072-D vector: [v_t-1 | v_t | v_t+1]
@@ -24,7 +31,7 @@ export const TemporalVectorSchema = z.object({
   t_minus1: EmbeddingSchema,   // where this code came from
   t_now:    EmbeddingSchema,   // what this code is now
   t_plus1:  EmbeddingSchema,   // where this code is going
-  concat:   z.array(z.number()).length(3072), // [t-1, t, t+1] flat — what goes to Qdrant
+  concat:   z.array(z.number()).length(DIM_3072), // [t-1, t, t+1] flat — what goes to Qdrant
 });
 
 export type TemporalVector = z.infer<typeof TemporalVectorSchema>;
@@ -34,11 +41,13 @@ export type TemporalVector = z.infer<typeof TemporalVectorSchema>;
 // ─────────────────────────────────────────────────────────────────
 
 export const DomainSchema = z.enum([
-  "roblox-luau",      // Physics-deterministic t+1 — state changes with every engine tick
-  "finance-crypto",   // Learned residual t+1 — liquidity pools, mempool, blockchain state
-  "source-audit",     // Static code — NO temporal geometry. Single 1024-D embed only.
-  "general",          // Static code — NO temporal geometry. Single 1024-D embed only.
-  "memory",           // Static documents — NO temporal geometry. Single 1024-D embed only.
+  "roblox-luau",           // Physics-deterministic t+1 — state changes with every engine tick
+  "finance-crypto",        // Learned residual t+1 — liquidity pools, mempool, blockchain state
+  "source-audit",          // Static code — NO temporal geometry. Single 1024-D embed only.
+  "general",               // Static code — NO temporal geometry. Single 1024-D embed only.
+  "memory",                // Static documents — NO temporal geometry. Single 1024-D embed only.
+  "reddit",                // Reddit domain — static text embeddings
+  "geospatial-standards",  // ISO/NATO geospatial standards — 0-dim structural fingerprint (3-D). NO Ollama.
 ]);
 
 export type Domain = z.infer<typeof DomainSchema>;
@@ -58,12 +67,18 @@ export type Domain = z.infer<typeof DomainSchema>;
  * Enforced at ingest time. Violations are a contract breach — not a config choice.
  */
 export const DOMAIN_GEOMETRY = {
-  "roblox-luau":    { temporal: true,  dim: 3072, reason: "physics-deterministic tick progression" },
-  "finance-crypto": { temporal: true,  dim: 3072, reason: "blockchain/mempool state transitions" },
-  "source-audit":   { temporal: false, dim: 1024, reason: "static code — no state progression" },
-  "general":        { temporal: false, dim: 1024, reason: "static code — no state progression" },
-  "memory":         { temporal: false, dim: 1024, reason: "static documents — no state progression" },
-} as const satisfies Record<Domain, { temporal: boolean; dim: 1024 | 3072; reason: string }>;
+  "roblox-luau":          { temporal: true,  dim: 3072, reason: "physics-deterministic tick progression" },
+  "finance-crypto":       { temporal: true,  dim: 3072, reason: "blockchain/mempool state transitions" },
+  "source-audit":         { temporal: false, dim: 1024, reason: "static code — no state progression" },
+  "general":              { temporal: false, dim: 1024, reason: "static code — no state progression" },
+  "memory":               { temporal: false, dim: 1024, reason: "static documents — no state progression" },
+  "reddit":               { temporal: false, dim: 1024, reason: "reddit content — static text" },
+  // Structural fingerprint layer — 3-D, deterministic, no Ollama, no network.
+  // [log(token_count), sha_hash_norm, log(chapter_count)] via 0-dim injector pattern.
+  // eve TriadGATGraphRAG(in_dim=3) builds the K-NN graph and heat map.
+  // Qdrant collection: spectral-heatmap-geo (dim=3).
+  "geospatial-standards": { temporal: false, dim: 3,    reason: "ISO/NATO standards — deterministic structural fingerprint, not semantic embedding" },
+} as const satisfies Record<Domain, { temporal: boolean; dim: number; reason: string }>;
 
 export type DomainGeometry = typeof DOMAIN_GEOMETRY[Domain];
 

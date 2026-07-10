@@ -1,0 +1,197 @@
+{
+  "name": "Spectral-Terrain Opsec Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ingest-opsec-payload",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "webhook-ingest",
+      "name": "Webhook (Ingest Payload)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [ 0, 0 ]
+    },
+    {
+      "parameters": {
+        "jsCode": "let rawPayload = '';\nlet domain = 'source-audit';\n\nif (items[0] && items[0].json && items[0].json.body) {\n  rawPayload = JSON.stringify(items[0].json.body);\n  if (items[0].json.body.domain) {\n    domain = items[0].json.body.domain;\n  }\n} else if (items[0] && items[0].json) {\n  rawPayload = JSON.stringify(items[0].json);\n}\n\nreturn [{\n  json: {\n    payload: rawPayload,\n    domain: domain\n  }\n}];"
+      },
+      "id": "code-format-payload",
+      "name": "Format Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [ 200, 0 ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3001/post",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Threat-Domain",
+              "value": "={{ $json.domain }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "data",
+              "value": "={{ $json.payload }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "http-lab-server",
+      "name": "Query Lab Server",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [ 400, 0 ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.geometricAudit.classification }}",
+                    "rightValue": "THREAT",
+                    "operator": { "type": "string", "operation": "equals" }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.geometricAudit.classification }}",
+                    "rightValue": "WATCH",
+                    "operator": { "type": "string", "operation": "equals" }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.geometricAudit.classification }}",
+                    "rightValue": "SAFE",
+                    "operator": { "type": "string", "operation": "equals" }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "switch-routing",
+      "name": "Route by Threat Level",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [ 600, 0 ]
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "={{ '/Users/joewales/spectral-terrain/corpus/quarantine/threat_' + $now.toFormat('yyyy-MM-dd_HHmmss') + '.json' }}",
+        "dataPropertyName": "parsedData",
+        "options": {}
+      },
+      "id": "write-threat",
+      "name": "Write THREAT",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [ 850, -200 ]
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "={{ '/Users/joewales/spectral-terrain/corpus/quarantine/watch_' + $now.toFormat('yyyy-MM-dd_HHmmss') + '.json' }}",
+        "dataPropertyName": "parsedData",
+        "options": {}
+      },
+      "id": "write-watch",
+      "name": "Write WATCH",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [ 850, 0 ]
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "={{ '/Users/joewales/spectral-terrain/corpus/ai-generated/safe_' + $now.toFormat('yyyy-MM-dd_HHmmss') + '.json' }}",
+        "dataPropertyName": "parsedData",
+        "options": {}
+      },
+      "id": "write-safe",
+      "name": "Write SAFE",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [ 850, 200 ]
+    }
+  ],
+  "connections": {
+    "Webhook (Ingest Payload)": {
+      "main": [
+        [ { "node": "Format Payload", "type": "main", "index": 0 } ]
+      ]
+    },
+    "Format Payload": {
+      "main": [
+        [ { "node": "Query Lab Server", "type": "main", "index": 0 } ]
+      ]
+    },
+    "Query Lab Server": {
+      "main": [
+        [ { "node": "Route by Threat Level", "type": "main", "index": 0 } ]
+      ]
+    },
+    "Route by Threat Level": {
+      "main": [
+        [ { "node": "Write THREAT", "type": "main", "index": 0 } ],
+        [ { "node": "Write WATCH", "type": "main", "index": 0 } ],
+        [ { "node": "Write SAFE", "type": "main", "index": 0 } ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "spectral-terrain-opsec-pipeline"
+  }
+}

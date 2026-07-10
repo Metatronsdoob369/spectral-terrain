@@ -24,9 +24,11 @@ import type { GameState } from "../contracts/roblox-luau.domain.js";
 import { validateLabel, printLabelAuditSummary } from "./label-validator.js";
 import { runDriftSidecar } from "./drift-sidecar.js";
 
-const QDRANT_URL = "http://127.0.0.1:6340";
-const HEATMAP_COLLECTION = "spectral-heatmap";         // 3072-D temporal domains
-const HEATMAP_1024_COLLECTION = "spectral-heatmap-1024"; // 1024-D static domains
+const QDRANT_URL = process.env.QDRANT_URL || "http://127.0.0.1:6340";
+const HEATMAP_COLLECTION = "spectral-heatmap";         // temporal domains (dim * 3)
+const HEATMAP_STATIC_COLLECTION = `spectral-heatmap-${process.env.EMBED_DIM || 1024}`; // static domains
+
+const STATIC_DIM = parseInt(process.env.EMBED_DIM || "1024", 10);
 
 const DOMAIN_EXTENSIONS: Record<Domain, string[]> = {
   "roblox-luau":    [".lua", ".luau"],
@@ -42,8 +44,8 @@ const DOMAIN_EXTENSIONS: Record<Domain, string[]> = {
 
 async function ensureCollection(domain: Domain) {
   const geometry = DOMAIN_GEOMETRY[domain];
-  const collection = geometry.temporal ? HEATMAP_COLLECTION : HEATMAP_1024_COLLECTION;
-  const dim = geometry.dim;
+  const dim = geometry.temporal ? STATIC_DIM * 3 : STATIC_DIM;
+  const collection = geometry.temporal ? HEATMAP_COLLECTION : HEATMAP_STATIC_COLLECTION;
 
   const res = await fetch(`${QDRANT_URL}/collections/${collection}`, { method: "GET" });
   if (res.ok) return;
@@ -86,7 +88,7 @@ function preIngestFilter(source: string): { text: string; stripped: number } {
 
 function walkRepo(rootPath: string, extensions: string[]): string[] {
   const files: string[] = [];
-  const SKIP_DIRS = new Set(["node_modules", ".git", "dist", ".next", "build", "__pycache__", "venv"]);
+  const SKIP_DIRS = new Set(["node_modules", ".git", "dist", ".next", "build", "__pycache__", "venv", "plugins"]);
 
   function walk(dir: string) {
     for (const entry of readdirSync(dir)) {
@@ -109,7 +111,7 @@ function walkRepo(rootPath: string, extensions: string[]): string[] {
 // ─────────────────────────────────────────────────────────────────
 
 async function upsertPoint(point: TerrainPoint, vector: number[]) {
-  const collection = DOMAIN_GEOMETRY[point.domain].temporal ? HEATMAP_COLLECTION : HEATMAP_1024_COLLECTION;
+  const collection = DOMAIN_GEOMETRY[point.domain].temporal ? HEATMAP_COLLECTION : HEATMAP_STATIC_COLLECTION;
   const res = await fetch(`${QDRANT_URL}/collections/${collection}/points`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },

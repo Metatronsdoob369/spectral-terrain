@@ -1,0 +1,11 @@
+{
+  "domain": "reddit",
+  "calibratedAt": "2026-05-31",
+  "canonicalCount": 100,
+  "shatterP90": 1.25,
+  "shatterStdev": 0.05,
+  "watchThreshold": 1.25,
+  "alarmThreshold": 1.35,
+  "slopQueryCutoff": 0.85,
+  "notes": "Reddit threat profile created for interactive testing."
+}

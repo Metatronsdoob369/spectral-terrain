@@ -1,0 +1,195 @@
+{
+  "corpus": "geospatial-standards",
+  "doc_count": 6,
+  "gsi_score": 0.646062,
+  "global_emb_norm": 0.948179,
+  "retrieval_hits": 0,
+  "gat_config": {
+    "in_dim": 3,
+    "hid": 64,
+    "out": 128,
+    "layers": 3,
+    "heads": 4
+  },
+  "triad_diagnostics": {
+    "current_tau_hess": 0.09999946677774911,
+    "eigenval_count": 4,
+    "avg_hessian_trace": 1536.0,
+    "avg_operator_norm": 0,
+    "convergence_rate": 1,
+    "spectral_range": [
+      -6.425792446451605e-17,
+      1.2000000476837158
+    ]
+  },
+  "documents": [
+    {
+      "id": "iphg_xsd",
+      "label": "IPHG XSD (GML App Schema)",
+      "tokens": 8670,
+      "chapters": 56,
+      "sha256": "bf39028ccb548c29",
+      "fingerprint_raw": [
+        9.06774,
+        0.46,
+        4.04305
+      ],
+      "fingerprint_norm": [
+        0.45452,
+        0.53125,
+        0.50562
+      ],
+      "fp_heat": 1.491386,
+      "fp_shatter": 0.203643,
+      "gat_heat": 12.005523,
+      "gat_shatter": 0.032447,
+      "retrieved_by_rag": false,
+      "nearest": [
+        "iphg_catalogue",
+        "dgiwg_portrayal",
+        "isotc211_skos"
+      ],
+      "embedding_norm": 1.341271
+    },
+    {
+      "id": "isotc211_skos",
+      "label": "ISO/TC 211 SKOS Glossary",
+      "tokens": 51216,
+      "chapters": 1507,
+      "sha256": "e9a782f6ac59ff0a",
+      "fingerprint_raw": [
+        10.84383,
+        0.366,
+        7.31854
+      ],
+      "fingerprint_norm": [
+        1.0,
+        0.39137,
+        1.0
+      ],
+      "fp_heat": 2.391369,
+      "fp_shatter": 0.9087,
+      "gat_heat": 11.434484,
+      "gat_shatter": 0.065807,
+      "retrieved_by_rag": false,
+      "nearest": [
+        "iphg_xsd",
+        "nga_wgs84",
+        "iphg_catalogue"
+      ],
+      "embedding_norm": 1.276494
+    },
+    {
+      "id": "dgiwg_dgra_synopsis",
+      "label": "DGIWG Geospatial Ref Architecture",
+      "tokens": 2226,
+      "chapters": 1,
+      "sha256": "6b62757c2508af78",
+      "fingerprint_raw": [
+        7.70841,
+        0.716,
+        0.69315
+      ],
+      "fingerprint_norm": [
+        0.03704,
+        0.9122,
+        0.0
+      ],
+      "fp_heat": 0.94924,
+      "fp_shatter": 0.595459,
+      "gat_heat": 11.41074,
+      "gat_shatter": 0.065268,
+      "retrieved_by_rag": false,
+      "nearest": [
+        "dgiwg_portrayal",
+        "iphg_catalogue",
+        "iphg_xsd"
+      ],
+      "embedding_norm": 1.275261
+    },
+    {
+      "id": "nga_wgs84",
+      "label": "NGA WGS84 Coordinate Standard",
+      "tokens": 32671,
+      "chapters": 1,
+      "sha256": "d39e97b79f47b231",
+      "fingerprint_raw": [
+        10.39427,
+        0.103,
+        0.69315
+      ],
+      "fingerprint_norm": [
+        0.86193,
+        0.0,
+        0.0
+      ],
+      "fp_heat": 0.861931,
+      "fp_shatter": 0.80861,
+      "gat_heat": 12.005523,
+      "gat_shatter": 0.032447,
+      "retrieved_by_rag": false,
+      "nearest": [
+        "iphg_xsd",
+        "isotc211_skos",
+        "dgiwg_portrayal"
+      ],
+      "embedding_norm": 1.341271
+    },
+    {
+      "id": "dgiwg_portrayal",
+      "label": "DGIWG Portrayal Roadmap Ed4.0",
+      "tokens": 1973,
+      "chapters": 1,
+      "sha256": "86563920a7e0663b",
+      "fingerprint_raw": [
+        7.58782,
+        0.664,
+        0.69315
+      ],
+      "fingerprint_norm": [
+        0.0,
+        0.83482,
+        0.0
+      ],
+      "fp_heat": 0.834821,
+      "fp_shatter": 0.587591,
+      "gat_heat": 12.005523,
+      "gat_shatter": 0.032447,
+      "retrieved_by_rag": false,
+      "nearest": [
+        "dgiwg_dgra_synopsis",
+        "iphg_catalogue",
+        "iphg_xsd"
+      ],
+      "embedding_norm": 1.341271
+    },
+    {
+      "id": "iphg_catalogue",
+      "label": "IPHG Feature Catalogue",
+      "tokens": 5021,
+      "chapters": 29,
+      "sha256": "a12399470f49e45f",
+      "fingerprint_raw": [
+        8.52158,
+        0.775,
+        3.4012
+      ],
+      "fingerprint_norm": [
+        0.28678,
+        1.0,
+        0.40874
+      ],
+      "fp_heat": 1.69552,
+      "fp_shatter": 0.427061,
+      "gat_heat": 12.005523,
+      "gat_shatter": 0.032447,
+      "retrieved_by_rag": false,
+      "nearest": [
+        "dgiwg_dgra_synopsis",
+        "iphg_xsd",
+        "dgiwg_portrayal"
+      ],
+      "embedding_norm": 1.341271
+    }
+  ]
+}

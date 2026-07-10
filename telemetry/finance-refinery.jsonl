@@ -1,0 +1,202 @@
+{"ts":"2026-06-17T05:30:01.278Z","dry_run":false,"msg":"Starting finance refinery — 2026-06-17"}
+{"ts":"2026-06-17T05:30:01.279Z","msg":"Loaded 0 prior pool states for temporal delta"}
+{"ts":"2026-06-17T05:30:01.615Z","msg":"Uniswap fetch failed: Uniswap API fetch failed: 403 "}
+{"ts":"2026-06-17T05:30:01.616Z","msg":"Fetched 20 pools/markets total"}
+{"ts":"2026-06-17T05:30:01.623Z","msg":"No centroid yet — shatter will be 0 until calibration run"}
+{"ts":"2026-06-17T05:39:03.381Z","pack":"/Users/joewales/spectral-terrain/store/finance-crypto-2026-06-17.jsonl","msg":"Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-17.jsonl (20 records)"}
+{"ts":"2026-06-17T05:39:03.382Z","sig":"8659dd02d56d4b0a...","msg":"Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-17.sig"}
+{"ts":"2026-06-17T05:39:03.382Z","status":"done","upserted":20,"errors":0,"dry_run":false,"msg":"Refinery complete — 20 upserted, 0 errors"}
+{"ts":"2026-06-18T05:30:01.215Z","dry_run":false,"msg":"Starting finance refinery — 2026-06-18"}
+{"ts":"2026-06-18T05:30:01.218Z","msg":"Loaded 20 prior pool states for temporal delta"}
+{"ts":"2026-06-18T05:30:01.502Z","msg":"Uniswap fetch failed: Uniswap API fetch failed: 403 "}
+{"ts":"2026-06-18T05:30:01.502Z","msg":"Fetched 20 pools/markets total"}
+{"ts":"2026-06-18T05:30:01.541Z","msg":"No centroid yet — shatter will be 0 until calibration run"}
+{"ts":"2026-06-18T05:37:57.414Z","pack":"/Users/joewales/spectral-terrain/store/finance-crypto-2026-06-18.jsonl","msg":"Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-18.jsonl (20 records)"}
+{"ts":"2026-06-18T05:37:57.415Z","sig":"435ba2482de3278a...","msg":"Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-18.sig"}
+{"ts":"2026-06-18T05:37:57.415Z","status":"done","upserted":20,"errors":0,"dry_run":false,"msg":"Refinery complete — 20 upserted, 0 errors"}
+{"ts":"2026-06-19T05:30:01.638Z","dry_run":false,"msg":"Starting finance refinery — 2026-06-19"}
+{"ts":"2026-06-19T05:30:01.642Z","msg":"Loaded 20 prior pool states for temporal delta"}
+{"ts":"2026-06-19T05:30:01.961Z","msg":"Uniswap fetch failed: Uniswap API fetch failed: 403 "}
+{"ts":"2026-06-19T05:30:01.962Z","msg":"Fetched 20 pools/markets total"}
+{"ts":"2026-06-19T05:30:02.066Z","msg":"No centroid yet — shatter will be 0 until calibration run"}
+{"ts":"2026-06-19T05:45:24.208Z","pack":"/Users/joewales/spectral-terrain/store/finance-crypto-2026-06-19.jsonl","msg":"Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-19.jsonl (20 records)"}
+{"ts":"2026-06-19T05:45:24.210Z","sig":"5262bfe1ffc03248...","msg":"Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-19.sig"}
+{"ts":"2026-06-19T05:45:24.210Z","status":"done","upserted":20,"errors":0,"dry_run":false,"msg":"Refinery complete — 20 upserted, 0 errors"}
+{"ts":"2026-06-20T05:30:02.352Z","dry_run":false,"msg":"Starting finance refinery — 2026-06-20"}
+{"ts":"2026-06-20T05:30:02.356Z","msg":"Loaded 20 prior pool states for temporal delta"}
+{"ts":"2026-06-20T05:30:02.722Z","msg":"Uniswap fetch failed: Uniswap API fetch failed: 403 "}
+{"ts":"2026-06-20T05:30:02.723Z","msg":"Fetched 20 pools/markets total"}
+{"ts":"2026-06-20T05:30:02.808Z","msg":"No centroid yet — shatter will be 0 until calibration run"}
+{"ts":"2026-06-20T05:43:25.338Z","pack":"/Users/joewales/spectral-terrain/store/finance-crypto-2026-06-20.jsonl","msg":"Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-20.jsonl (20 records)"}
+{"ts":"2026-06-20T05:43:25.338Z","sig":"c7b92624e354e73c...","msg":"Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-20.sig"}
+{"ts":"2026-06-20T05:43:25.339Z","status":"done","upserted":20,"errors":0,"dry_run":false,"msg":"Refinery complete — 20 upserted, 0 errors"}
+{"ts":"2026-06-21T05:30:01.758Z","dry_run":false,"msg":"Starting finance refinery — 2026-06-21"}
+{"ts":"2026-06-21T05:30:01.761Z","msg":"Loaded 20 prior pool states for temporal delta"}
+{"ts":"2026-06-21T05:30:02.111Z","msg":"Uniswap fetch failed: Uniswap API fetch failed: 403 "}
+{"ts":"2026-06-21T05:30:02.111Z","msg":"Fetched 20 pools/markets total"}
+{"ts":"2026-06-21T05:30:02.181Z","msg":"No centroid yet — shatter will be 0 until calibration run"}
+{"ts":"2026-06-21T05:42:33.331Z","pack":"/Users/joewales/spectral-terrain/store/finance-crypto-2026-06-21.jsonl","msg":"Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-21.jsonl (20 records)"}
+{"ts":"2026-06-21T05:42:33.332Z","sig":"ed656749b798e699...","msg":"Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-21.sig"}
+{"ts":"2026-06-21T05:42:33.332Z","status":"done","upserted":20,"errors":0,"dry_run":false,"msg":"Refinery complete — 20 upserted, 0 errors"}
+{"ts":"2026-06-22T05:30:04.213Z","dry_run":false,"msg":"Starting finance refinery — 2026-06-22"}
+{"ts":"2026-06-22T05:30:04.228Z","msg":"Loaded 20 prior pool states for temporal delta"}
+{"ts":"2026-06-22T05:30:04.652Z","msg":"Uniswap fetch failed: Uniswap API fetch failed: 403 "}
+{"ts":"2026-06-22T05:30:04.652Z","msg":"Fetched 20 pools/markets total"}
+{"ts":"2026-06-22T05:30:04.709Z","msg":"No centroid yet — shatter will be 0 until calibration run"}
+{"ts":"2026-06-22T05:38:43.250Z","pool_id":"polymarket-clob:0x32cfa52198e85e070d1b17d1b53c5c3a6aaae7736cdc33fa6aa04d353f0c2811","error":true,"msg":"Error processing polymarket-clob:0x32cfa52198e85e070d1b17d1b53c5c3a6aaae7736cdc33fa6aa04d353f0c2811: fetch failed"}
+{"ts":"2026-06-22T05:38:43.259Z","pool_id":"polymarket-clob:0x0189df05ed7bf84d799213b01a79571e305c03b2ac5359cfbb3a323448ba20fa","error":true,"msg":"Error processing polymarket-clob:0x0189df05ed7bf84d799213b01a79571e305c03b2ac5359cfbb3a323448ba20fa: fetch failed"}
+{"ts":"2026-06-22T05:38:43.265Z","pool_id":"polymarket-clob:0x7d0aaf81bbd3fd73b6a1651cce08a452c0cbf9c0cbb4520ce0f981065b639d88","error":true,"msg":"Error processing polymarket-clob:0x7d0aaf81bbd3fd73b6a1651cce08a452c0cbf9c0cbb4520ce0f981065b639d88: fetch failed"}
+{"ts":"2026-06-22T05:38:43.270Z","pool_id":"polymarket-clob:0x65307f30dce84ac35e41813035d3c04933da830dc4efbbb2fcdc4b282700ef3b","error":true,"msg":"Error processing polymarket-clob:0x65307f30dce84ac35e41813035d3c04933da830dc4efbbb2fcdc4b282700ef3b: fetch failed"}
+{"ts":"2026-06-22T05:38:43.274Z","pool_id":"polymarket-clob:0x7976b8dbacf9077eb1453a62bcefd6ab2df199acd28aad276ff0d920d6992892","error":true,"msg":"Error processing polymarket-clob:0x7976b8dbacf9077eb1453a62bcefd6ab2df199acd28aad276ff0d920d6992892: fetch failed"}
+{"ts":"2026-06-22T05:38:43.279Z","pool_id":"polymarket-clob:0xe5bd80313b8859e3f5761568ac9498866ea9d4419e4d1b6a877a9a9bd2754cb4","error":true,"msg":"Error processing polymarket-clob:0xe5bd80313b8859e3f5761568ac9498866ea9d4419e4d1b6a877a9a9bd2754cb4: fetch failed"}
+{"ts":"2026-06-22T05:38:43.282Z","pool_id":"polymarket-clob:0x7412d284c8f63791fec807f9b1f61c6fe61163621775a3dc8686cd2575272abe","error":true,"msg":"Error processing polymarket-clob:0x7412d284c8f63791fec807f9b1f61c6fe61163621775a3dc8686cd2575272abe: fetch failed"}
+{"ts":"2026-06-22T05:38:43.285Z","pool_id":"polymarket-clob:0xcdb1f0400949238a63d3e88243d2ada08cd9c2a71985ced9f0cfd5e66354cf90","error":true,"msg":"Error processing polymarket-clob:0xcdb1f0400949238a63d3e88243d2ada08cd9c2a71985ced9f0cfd5e66354cf90: fetch failed"}
+{"ts":"2026-06-22T05:38:43.291Z","pool_id":"polymarket-clob:0x289568d555ec620ed6fa33c936c5f42649d3a2e30748a1daf7079f42453fbea4","error":true,"msg":"Error processing polymarket-clob:0x289568d555ec620ed6fa33c936c5f42649d3a2e30748a1daf7079f42453fbea4: fetch failed"}
+{"ts":"2026-06-22T05:38:43.295Z","pool_id":"polymarket-clob:0x0c4cd2055d6ea89354ffddc55d6dbcef9355748112ea952fc925f3db6a5c457f","error":true,"msg":"Error processing polymarket-clob:0x0c4cd2055d6ea89354ffddc55d6dbcef9355748112ea952fc925f3db6a5c457f: fetch failed"}
+{"ts":"2026-06-22T05:38:43.298Z","pool_id":"polymarket-clob:0x5bdcf0fd010eba1a55a0f3de9be6612fc72038279a734e994ce2e34664a3cfe4","error":true,"msg":"Error processing polymarket-clob:0x5bdcf0fd010eba1a55a0f3de9be6612fc72038279a734e994ce2e34664a3cfe4: fetch failed"}
+{"ts":"2026-06-22T05:38:43.306Z","pool_id":"polymarket-clob:0x881a3ffa618b6ae0ab95a5637e310afb1afc2d99c921bfe3235b15eccfce0344","error":true,"msg":"Error processing polymarket-clob:0x881a3ffa618b6ae0ab95a5637e310afb1afc2d99c921bfe3235b15eccfce0344: fetch failed"}
+{"ts":"2026-06-22T05:38:43.318Z","pool_id":"polymarket-clob:0xe99cc59f32b10d23acf196d1a0e8264ea30fca198428acadd3464b06ff60e771","error":true,"msg":"Error processing polymarket-clob:0xe99cc59f32b10d23acf196d1a0e8264ea30fca198428acadd3464b06ff60e771: fetch failed"}
+{"ts":"2026-06-22T05:38:43.324Z","pool_id":"polymarket-clob:0x5ccfe1b69a582d2985db08a8481a0d74c314b1fce9b4711ae2efb2c6467fe6aa","error":true,"msg":"Error processing polymarket-clob:0x5ccfe1b69a582d2985db08a8481a0d74c314b1fce9b4711ae2efb2c6467fe6aa: fetch failed"}
+{"ts":"2026-06-22T05:38:43.334Z","pool_id":"polymarket-clob:0x7b52405ad0e0d31bfe970940b67d77f24ecedeab8a2361c11148c02a006e325c","error":true,"msg":"Error processing polymarket-clob:0x7b52405ad0e0d31bfe970940b67d77f24ecedeab8a2361c11148c02a006e325c: fetch failed"}
+{"ts":"2026-06-22T05:38:43.340Z","pool_id":"polymarket-clob:0x1595b4818eeb1ea1e0bec5de6f057218e557feee9b405a0e930d290384fa1d16","error":true,"msg":"Error processing polymarket-clob:0x1595b4818eeb1ea1e0bec5de6f057218e557feee9b405a0e930d290384fa1d16: fetch failed"}
+{"ts":"2026-06-22T05:38:43.349Z","pool_id":"polymarket-clob:0x4f3421fb2daf5cca7430ed8d8132463963081572d75434393a1808fdb8829fe8","error":true,"msg":"Error processing polymarket-clob:0x4f3421fb2daf5cca7430ed8d8132463963081572d75434393a1808fdb8829fe8: fetch failed"}
+{"ts":"2026-06-22T05:38:43.356Z","pool_id":"polymarket-clob:0x9be56371f6a29d12769b2f196847ee825b9585ebb8bfa042136be031b081eba1","error":true,"msg":"Error processing polymarket-clob:0x9be56371f6a29d12769b2f196847ee825b9585ebb8bfa042136be031b081eba1: fetch failed"}
+{"ts":"2026-06-22T05:38:43.358Z","pack":"/Users/joewales/spectral-terrain/store/finance-crypto-2026-06-22.jsonl","msg":"Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-22.jsonl (2 records)"}
+{"ts":"2026-06-22T05:38:43.358Z","sig":"9a95195fe7b49bde...","msg":"Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-22.sig"}
+{"ts":"2026-06-22T05:38:43.358Z","status":"done","upserted":2,"errors":18,"dry_run":false,"msg":"Refinery complete — 2 upserted, 18 errors"}
+{"ts":"2026-06-23T05:30:03.111Z","dry_run":false,"msg":"Starting finance refinery — 2026-06-23"}
+{"ts":"2026-06-23T05:30:03.121Z","msg":"Loaded 2 prior pool states for temporal delta"}
+{"ts":"2026-06-23T05:30:03.753Z","msg":"Uniswap fetch failed: Uniswap API fetch failed: 403 "}
+{"ts":"2026-06-23T05:30:03.753Z","msg":"Fetched 20 pools/markets total"}
+{"ts":"2026-06-23T05:30:03.774Z","msg":"No centroid yet — shatter will be 0 until calibration run"}
+{"ts":"2026-06-23T05:46:26.718Z","pack":"/Users/joewales/spectral-terrain/store/finance-crypto-2026-06-23.jsonl","msg":"Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-23.jsonl (20 records)"}
+{"ts":"2026-06-23T05:46:26.719Z","sig":"63536ad143487096...","msg":"Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-23.sig"}
+{"ts":"2026-06-23T05:46:26.719Z","status":"done","upserted":20,"errors":0,"dry_run":false,"msg":"Refinery complete — 20 upserted, 0 errors"}
+{"ts":"2026-06-24T05:30:02.397Z","dry_run":false,"msg":"Starting finance refinery — 2026-06-24"}
+{"ts":"2026-06-24T05:30:02.403Z","msg":"Loaded 20 prior pool states for temporal delta"}
+{"ts":"2026-06-24T05:30:03.046Z","msg":"Uniswap fetch failed: Uniswap API fetch failed: 403 "}
+{"ts":"2026-06-24T05:30:03.047Z","msg":"Fetched 20 pools/markets total"}
+{"ts":"2026-06-24T05:30:03.065Z","msg":"No centroid yet — shatter will be 0 until calibration run"}
+{"ts":"2026-06-24T05:44:35.768Z","pack":"/Users/joewales/spectral-terrain/store/finance-crypto-2026-06-24.jsonl","msg":"Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-24.jsonl (20 records)"}
+{"ts":"2026-06-24T05:44:35.769Z","sig":"4376e8cee446487b...","msg":"Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-24.sig"}
+{"ts":"2026-06-24T05:44:35.770Z","status":"done","upserted":20,"errors":0,"dry_run":false,"msg":"Refinery complete — 20 upserted, 0 errors"}
+{"ts":"2026-06-25T05:30:02.812Z","dry_run":false,"msg":"Starting finance refinery — 2026-06-25"}
+{"ts":"2026-06-25T05:30:02.818Z","msg":"Loaded 20 prior pool states for temporal delta"}
+{"ts":"2026-06-25T05:30:03.213Z","msg":"Uniswap fetch failed: Uniswap API fetch failed: 403 "}
+{"ts":"2026-06-25T05:30:03.214Z","msg":"Fetched 20 pools/markets total"}
+{"ts":"2026-06-25T05:30:03.274Z","msg":"No centroid yet — shatter will be 0 until calibration run"}
+{"ts":"2026-06-25T05:45:37.393Z","pack":"/Users/joewales/spectral-terrain/store/finance-crypto-2026-06-25.jsonl","msg":"Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-25.jsonl (20 records)"}
+{"ts":"2026-06-25T05:45:37.394Z","sig":"13de1b32c9b6aaa8...","msg":"Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-25.sig"}
+{"ts":"2026-06-25T05:45:37.394Z","status":"done","upserted":20,"errors":0,"dry_run":false,"msg":"Refinery complete — 20 upserted, 0 errors"}
+{"ts":"2026-06-26T05:30:02.350Z","dry_run":false,"msg":"Starting finance refinery — 2026-06-26"}
+{"ts":"2026-06-26T05:30:02.355Z","msg":"Loaded 20 prior pool states for temporal delta"}
+{"ts":"2026-06-26T05:30:02.739Z","msg":"Uniswap fetch failed: Uniswap API fetch failed: 403 "}
+{"ts":"2026-06-26T05:30:02.740Z","msg":"Fetched 20 pools/markets total"}
+{"ts":"2026-06-26T05:30:02.756Z","msg":"No centroid yet — shatter will be 0 until calibration run"}
+{"ts":"2026-06-26T05:43:44.933Z","pack":"/Users/joewales/spectral-terrain/store/finance-crypto-2026-06-26.jsonl","msg":"Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-26.jsonl (20 records)"}
+{"ts":"2026-06-26T05:43:44.934Z","sig":"4a8947b4747baaa6...","msg":"Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-26.sig"}
+{"ts":"2026-06-26T05:43:44.935Z","status":"done","upserted":20,"errors":0,"dry_run":false,"msg":"Refinery complete — 20 upserted, 0 errors"}
+{"ts":"2026-06-27T05:30:03.505Z","dry_run":false,"msg":"Starting finance refinery — 2026-06-27"}
+{"ts":"2026-06-27T05:30:03.510Z","msg":"Loaded 20 prior pool states for temporal delta"}
+{"ts":"2026-06-27T05:30:04.106Z","msg":"Uniswap fetch failed: Uniswap API fetch failed: 403 "}
+{"ts":"2026-06-27T05:30:04.106Z","msg":"Fetched 20 pools/markets total"}
+{"ts":"2026-06-27T05:30:04.153Z","msg":"No centroid yet — shatter will be 0 until calibration run"}
+{"ts":"2026-06-27T05:50:46.150Z","pack":"/Users/joewales/spectral-terrain/store/finance-crypto-2026-06-27.jsonl","msg":"Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-27.jsonl (20 records)"}
+{"ts":"2026-06-27T05:50:46.153Z","sig":"9be22cfc2422d4e3...","msg":"Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-27.sig"}
+{"ts":"2026-06-27T05:50:46.153Z","status":"done","upserted":20,"errors":0,"dry_run":false,"msg":"Refinery complete — 20 upserted, 0 errors"}
+{"ts":"2026-06-28T05:30:02.763Z","dry_run":false,"msg":"Starting finance refinery — 2026-06-28"}
+{"ts":"2026-06-28T05:30:02.771Z","msg":"Loaded 20 prior pool states for temporal delta"}
+{"ts":"2026-06-28T05:30:03.263Z","msg":"Uniswap fetch failed: Uniswap API fetch failed: 403 "}
+{"ts":"2026-06-28T05:30:03.265Z","msg":"Fetched 20 pools/markets total"}
+{"ts":"2026-06-28T05:30:03.286Z","msg":"No centroid yet — shatter will be 0 until calibration run"}
+{"ts":"2026-06-28T05:46:16.018Z","pack":"/Users/joewales/spectral-terrain/store/finance-crypto-2026-06-28.jsonl","msg":"Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-28.jsonl (20 records)"}
+{"ts":"2026-06-28T05:46:16.020Z","sig":"b81f31d43fa98e26...","msg":"Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-28.sig"}
+{"ts":"2026-06-28T05:46:16.020Z","status":"done","upserted":20,"errors":0,"dry_run":false,"msg":"Refinery complete — 20 upserted, 0 errors"}
+{"ts":"2026-06-29T05:30:01.230Z","dry_run":false,"msg":"Starting finance refinery — 2026-06-29"}
+{"ts":"2026-06-29T05:30:01.233Z","msg":"Loaded 20 prior pool states for temporal delta"}
+{"ts":"2026-06-29T05:30:01.750Z","msg":"Uniswap fetch failed: Uniswap API fetch failed: 403 "}
+{"ts":"2026-06-29T05:30:01.750Z","msg":"Fetched 20 pools/markets total"}
+{"ts":"2026-06-29T05:30:01.762Z","msg":"No centroid yet — shatter will be 0 until calibration run"}
+{"ts":"2026-06-29T05:37:35.241Z","pack":"/Users/joewales/spectral-terrain/store/finance-crypto-2026-06-29.jsonl","msg":"Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-29.jsonl (20 records)"}
+{"ts":"2026-06-29T05:37:35.242Z","sig":"a8f803eca4192af3...","msg":"Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-29.sig"}
+{"ts":"2026-06-29T05:37:35.242Z","status":"done","upserted":20,"errors":0,"dry_run":false,"msg":"Refinery complete — 20 upserted, 0 errors"}
+{"ts":"2026-06-30T05:30:01.138Z","dry_run":false,"msg":"Starting finance refinery — 2026-06-30"}
+{"ts":"2026-06-30T05:30:01.141Z","msg":"Loaded 20 prior pool states for temporal delta"}
+{"ts":"2026-06-30T05:30:01.634Z","msg":"Uniswap fetch failed: Uniswap API fetch failed: 403 "}
+{"ts":"2026-06-30T05:30:01.634Z","msg":"Fetched 20 pools/markets total"}
+{"ts":"2026-06-30T05:30:01.642Z","msg":"No centroid yet — shatter will be 0 until calibration run"}
+{"ts":"2026-06-30T05:37:03.540Z","pack":"/Users/joewales/spectral-terrain/store/finance-crypto-2026-06-30.jsonl","msg":"Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-30.jsonl (20 records)"}
+{"ts":"2026-06-30T05:37:03.540Z","sig":"6cce3a01af7d1c2c...","msg":"Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-30.sig"}
+{"ts":"2026-06-30T05:37:03.540Z","status":"done","upserted":20,"errors":0,"dry_run":false,"msg":"Refinery complete — 20 upserted, 0 errors"}
+{"ts":"2026-07-01T05:30:01.515Z","dry_run":false,"msg":"Starting finance refinery — 2026-07-01"}
+{"ts":"2026-07-01T05:30:01.519Z","msg":"Loaded 20 prior pool states for temporal delta"}
+{"ts":"2026-07-01T05:30:01.862Z","msg":"Uniswap fetch failed: Uniswap API fetch failed: 403 "}
+{"ts":"2026-07-01T05:30:01.862Z","msg":"Fetched 20 pools/markets total"}
+{"ts":"2026-07-01T05:30:01.870Z","msg":"No centroid yet — shatter will be 0 until calibration run"}
+{"ts":"2026-07-01T05:37:18.011Z","pack":"/Users/joewales/spectral-terrain/store/finance-crypto-2026-07-01.jsonl","msg":"Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-01.jsonl (20 records)"}
+{"ts":"2026-07-01T05:37:18.011Z","sig":"250e37860f837228...","msg":"Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-01.sig"}
+{"ts":"2026-07-01T05:37:18.012Z","status":"done","upserted":20,"errors":0,"dry_run":false,"msg":"Refinery complete — 20 upserted, 0 errors"}
+{"ts":"2026-07-02T05:30:01.026Z","dry_run":false,"msg":"Starting finance refinery — 2026-07-02"}
+{"ts":"2026-07-02T05:30:01.029Z","msg":"Loaded 20 prior pool states for temporal delta"}
+{"ts":"2026-07-02T05:30:01.368Z","msg":"Uniswap fetch failed: Uniswap API fetch failed: 403 "}
+{"ts":"2026-07-02T05:30:01.369Z","msg":"Fetched 20 pools/markets total"}
+{"ts":"2026-07-02T05:30:01.376Z","msg":"No centroid yet — shatter will be 0 until calibration run"}
+{"ts":"2026-07-02T05:37:31.506Z","pack":"/Users/joewales/spectral-terrain/store/finance-crypto-2026-07-02.jsonl","msg":"Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-02.jsonl (20 records)"}
+{"ts":"2026-07-02T05:37:31.506Z","sig":"10dec9611e70ad16...","msg":"Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-02.sig"}
+{"ts":"2026-07-02T05:37:31.507Z","status":"done","upserted":20,"errors":0,"dry_run":false,"msg":"Refinery complete — 20 upserted, 0 errors"}
+{"ts":"2026-07-03T05:30:01.032Z","dry_run":false,"msg":"Starting finance refinery — 2026-07-03"}
+{"ts":"2026-07-03T05:30:01.035Z","msg":"Loaded 20 prior pool states for temporal delta"}
+{"ts":"2026-07-03T05:30:01.347Z","msg":"Uniswap fetch failed: Uniswap API fetch failed: 403 "}
+{"ts":"2026-07-03T05:30:01.347Z","msg":"Fetched 20 pools/markets total"}
+{"ts":"2026-07-03T05:30:01.357Z","msg":"No centroid yet — shatter will be 0 until calibration run"}
+{"ts":"2026-07-03T05:37:35.915Z","pack":"/Users/joewales/spectral-terrain/store/finance-crypto-2026-07-03.jsonl","msg":"Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-03.jsonl (20 records)"}
+{"ts":"2026-07-03T05:37:35.915Z","sig":"8fba2334e902ec2a...","msg":"Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-03.sig"}
+{"ts":"2026-07-03T05:37:35.915Z","status":"done","upserted":20,"errors":0,"dry_run":false,"msg":"Refinery complete — 20 upserted, 0 errors"}
+{"ts":"2026-07-04T05:30:00.995Z","dry_run":false,"msg":"Starting finance refinery — 2026-07-04"}
+{"ts":"2026-07-04T05:30:00.998Z","msg":"Loaded 20 prior pool states for temporal delta"}
+{"ts":"2026-07-04T05:30:01.375Z","msg":"Uniswap fetch failed: Uniswap API fetch failed: 403 "}
+{"ts":"2026-07-04T05:30:01.375Z","msg":"Fetched 20 pools/markets total"}
+{"ts":"2026-07-04T05:30:01.385Z","msg":"No centroid yet — shatter will be 0 until calibration run"}
+{"ts":"2026-07-04T05:37:17.234Z","pack":"/Users/joewales/spectral-terrain/store/finance-crypto-2026-07-04.jsonl","msg":"Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-04.jsonl (20 records)"}
+{"ts":"2026-07-04T05:37:17.235Z","sig":"ad3e6407c94764a3...","msg":"Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-04.sig"}
+{"ts":"2026-07-04T05:37:17.235Z","status":"done","upserted":20,"errors":0,"dry_run":false,"msg":"Refinery complete — 20 upserted, 0 errors"}
+{"ts":"2026-07-05T05:30:01.030Z","dry_run":false,"msg":"Starting finance refinery — 2026-07-05"}
+{"ts":"2026-07-05T05:30:01.032Z","msg":"Loaded 20 prior pool states for temporal delta"}
+{"ts":"2026-07-05T05:30:01.351Z","msg":"Uniswap fetch failed: Uniswap API fetch failed: 403 "}
+{"ts":"2026-07-05T05:30:01.351Z","msg":"Fetched 20 pools/markets total"}
+{"ts":"2026-07-05T05:30:01.363Z","msg":"No centroid yet — shatter will be 0 until calibration run"}
+{"ts":"2026-07-05T05:37:47.297Z","pack":"/Users/joewales/spectral-terrain/store/finance-crypto-2026-07-05.jsonl","msg":"Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-05.jsonl (20 records)"}
+{"ts":"2026-07-05T05:37:47.297Z","sig":"17f28183bbd440d6...","msg":"Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-05.sig"}
+{"ts":"2026-07-05T05:37:47.297Z","status":"done","upserted":20,"errors":0,"dry_run":false,"msg":"Refinery complete — 20 upserted, 0 errors"}
+{"ts":"2026-07-06T05:30:01.069Z","dry_run":false,"msg":"Starting finance refinery — 2026-07-06"}
+{"ts":"2026-07-06T05:30:01.072Z","msg":"Loaded 20 prior pool states for temporal delta"}
+{"ts":"2026-07-06T05:30:01.458Z","msg":"Uniswap fetch failed: Uniswap API fetch failed: 403 "}
+{"ts":"2026-07-06T05:30:01.458Z","msg":"Fetched 20 pools/markets total"}
+{"ts":"2026-07-06T05:30:01.466Z","msg":"No centroid yet — shatter will be 0 until calibration run"}
+{"ts":"2026-07-06T05:37:52.506Z","pack":"/Users/joewales/spectral-terrain/store/finance-crypto-2026-07-06.jsonl","msg":"Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-06.jsonl (20 records)"}
+{"ts":"2026-07-06T05:37:52.507Z","sig":"50c15933456482ae...","msg":"Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-06.sig"}
+{"ts":"2026-07-06T05:37:52.507Z","status":"done","upserted":20,"errors":0,"dry_run":false,"msg":"Refinery complete — 20 upserted, 0 errors"}
+{"ts":"2026-07-07T05:30:01.442Z","dry_run":false,"msg":"Starting finance refinery — 2026-07-07"}
+{"ts":"2026-07-07T05:30:01.445Z","msg":"Loaded 20 prior pool states for temporal delta"}
+{"ts":"2026-07-07T05:30:01.776Z","msg":"Uniswap fetch failed: Uniswap API fetch failed: 403 "}
+{"ts":"2026-07-07T05:30:01.777Z","msg":"Fetched 20 pools/markets total"}
+{"ts":"2026-07-07T05:30:01.789Z","msg":"No centroid yet — shatter will be 0 until calibration run"}
+{"ts":"2026-07-07T05:38:09.803Z","pack":"/Users/joewales/spectral-terrain/store/finance-crypto-2026-07-07.jsonl","msg":"Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-07.jsonl (20 records)"}
+{"ts":"2026-07-07T05:38:09.804Z","sig":"ea0daaa1b7d602e2...","msg":"Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-07.sig"}
+{"ts":"2026-07-07T05:38:09.804Z","status":"done","upserted":20,"errors":0,"dry_run":false,"msg":"Refinery complete — 20 upserted, 0 errors"}
+{"ts":"2026-07-08T05:30:01.300Z","dry_run":false,"msg":"Starting finance refinery — 2026-07-08"}
+{"ts":"2026-07-08T05:30:01.303Z","msg":"Loaded 20 prior pool states for temporal delta"}
+{"ts":"2026-07-08T05:30:01.695Z","msg":"Uniswap fetch failed: Uniswap API fetch failed: 403 "}
+{"ts":"2026-07-08T05:30:01.695Z","msg":"Fetched 20 pools/markets total"}
+{"ts":"2026-07-08T05:30:01.710Z","msg":"No centroid yet — shatter will be 0 until calibration run"}
+{"ts":"2026-07-08T05:39:24.303Z","pack":"/Users/joewales/spectral-terrain/store/finance-crypto-2026-07-08.jsonl","msg":"Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-08.jsonl (20 records)"}
+{"ts":"2026-07-08T05:39:24.304Z","sig":"b0b2059b06942e74...","msg":"Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-08.sig"}
+{"ts":"2026-07-08T05:39:24.304Z","status":"done","upserted":20,"errors":0,"dry_run":false,"msg":"Refinery complete — 20 upserted, 0 errors"}
+{"ts":"2026-07-09T05:30:02.641Z","dry_run":false,"msg":"Starting finance refinery — 2026-07-09"}
+{"ts":"2026-07-09T05:30:02.654Z","msg":"Loaded 20 prior pool states for temporal delta"}
+{"ts":"2026-07-09T05:30:03.086Z","msg":"Uniswap fetch failed: Uniswap API fetch failed: 403 "}
+{"ts":"2026-07-09T05:30:03.086Z","msg":"Fetched 20 pools/markets total"}
+{"ts":"2026-07-09T05:30:03.094Z","msg":"No centroid yet — shatter will be 0 until calibration run"}
+{"ts":"2026-07-09T05:38:28.834Z","pack":"/Users/joewales/spectral-terrain/store/finance-crypto-2026-07-09.jsonl","msg":"Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-09.jsonl (20 records)"}
+{"ts":"2026-07-09T05:38:28.834Z","sig":"75ddd59a7656dd22...","msg":"Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-09.sig"}
+{"ts":"2026-07-09T05:38:28.834Z","status":"done","upserted":20,"errors":0,"dry_run":false,"msg":"Refinery complete — 20 upserted, 0 errors"}

@@ -1,0 +1,202 @@
+  Starting finance refinery — 2026-06-17
+  Loaded 0 prior pool states for temporal delta
+  Uniswap fetch failed: Uniswap API fetch failed: 403 
+  Fetched 20 pools/markets total
+  No centroid yet — shatter will be 0 until calibration run
+  Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-17.jsonl (20 records)
+  Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-17.sig
+  Refinery complete — 20 upserted, 0 errors
+  Starting finance refinery — 2026-06-18
+  Loaded 20 prior pool states for temporal delta
+  Uniswap fetch failed: Uniswap API fetch failed: 403 
+  Fetched 20 pools/markets total
+  No centroid yet — shatter will be 0 until calibration run
+  Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-18.jsonl (20 records)
+  Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-18.sig
+  Refinery complete — 20 upserted, 0 errors
+  Starting finance refinery — 2026-06-19
+  Loaded 20 prior pool states for temporal delta
+  Uniswap fetch failed: Uniswap API fetch failed: 403 
+  Fetched 20 pools/markets total
+  No centroid yet — shatter will be 0 until calibration run
+  Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-19.jsonl (20 records)
+  Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-19.sig
+  Refinery complete — 20 upserted, 0 errors
+  Starting finance refinery — 2026-06-20
+  Loaded 20 prior pool states for temporal delta
+  Uniswap fetch failed: Uniswap API fetch failed: 403 
+  Fetched 20 pools/markets total
+  No centroid yet — shatter will be 0 until calibration run
+  Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-20.jsonl (20 records)
+  Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-20.sig
+  Refinery complete — 20 upserted, 0 errors
+  Starting finance refinery — 2026-06-21
+  Loaded 20 prior pool states for temporal delta
+  Uniswap fetch failed: Uniswap API fetch failed: 403 
+  Fetched 20 pools/markets total
+  No centroid yet — shatter will be 0 until calibration run
+  Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-21.jsonl (20 records)
+  Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-21.sig
+  Refinery complete — 20 upserted, 0 errors
+  Starting finance refinery — 2026-06-22
+  Loaded 20 prior pool states for temporal delta
+  Uniswap fetch failed: Uniswap API fetch failed: 403 
+  Fetched 20 pools/markets total
+  No centroid yet — shatter will be 0 until calibration run
+  Error processing polymarket-clob:0x32cfa52198e85e070d1b17d1b53c5c3a6aaae7736cdc33fa6aa04d353f0c2811: fetch failed
+  Error processing polymarket-clob:0x0189df05ed7bf84d799213b01a79571e305c03b2ac5359cfbb3a323448ba20fa: fetch failed
+  Error processing polymarket-clob:0x7d0aaf81bbd3fd73b6a1651cce08a452c0cbf9c0cbb4520ce0f981065b639d88: fetch failed
+  Error processing polymarket-clob:0x65307f30dce84ac35e41813035d3c04933da830dc4efbbb2fcdc4b282700ef3b: fetch failed
+  Error processing polymarket-clob:0x7976b8dbacf9077eb1453a62bcefd6ab2df199acd28aad276ff0d920d6992892: fetch failed
+  Error processing polymarket-clob:0xe5bd80313b8859e3f5761568ac9498866ea9d4419e4d1b6a877a9a9bd2754cb4: fetch failed
+  Error processing polymarket-clob:0x7412d284c8f63791fec807f9b1f61c6fe61163621775a3dc8686cd2575272abe: fetch failed
+  Error processing polymarket-clob:0xcdb1f0400949238a63d3e88243d2ada08cd9c2a71985ced9f0cfd5e66354cf90: fetch failed
+  Error processing polymarket-clob:0x289568d555ec620ed6fa33c936c5f42649d3a2e30748a1daf7079f42453fbea4: fetch failed
+  Error processing polymarket-clob:0x0c4cd2055d6ea89354ffddc55d6dbcef9355748112ea952fc925f3db6a5c457f: fetch failed
+  Error processing polymarket-clob:0x5bdcf0fd010eba1a55a0f3de9be6612fc72038279a734e994ce2e34664a3cfe4: fetch failed
+  Error processing polymarket-clob:0x881a3ffa618b6ae0ab95a5637e310afb1afc2d99c921bfe3235b15eccfce0344: fetch failed
+  Error processing polymarket-clob:0xe99cc59f32b10d23acf196d1a0e8264ea30fca198428acadd3464b06ff60e771: fetch failed
+  Error processing polymarket-clob:0x5ccfe1b69a582d2985db08a8481a0d74c314b1fce9b4711ae2efb2c6467fe6aa: fetch failed
+  Error processing polymarket-clob:0x7b52405ad0e0d31bfe970940b67d77f24ecedeab8a2361c11148c02a006e325c: fetch failed
+  Error processing polymarket-clob:0x1595b4818eeb1ea1e0bec5de6f057218e557feee9b405a0e930d290384fa1d16: fetch failed
+  Error processing polymarket-clob:0x4f3421fb2daf5cca7430ed8d8132463963081572d75434393a1808fdb8829fe8: fetch failed
+  Error processing polymarket-clob:0x9be56371f6a29d12769b2f196847ee825b9585ebb8bfa042136be031b081eba1: fetch failed
+  Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-22.jsonl (2 records)
+  Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-22.sig
+  Refinery complete — 2 upserted, 18 errors
+  Starting finance refinery — 2026-06-23
+  Loaded 2 prior pool states for temporal delta
+  Uniswap fetch failed: Uniswap API fetch failed: 403 
+  Fetched 20 pools/markets total
+  No centroid yet — shatter will be 0 until calibration run
+  Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-23.jsonl (20 records)
+  Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-23.sig
+  Refinery complete — 20 upserted, 0 errors
+  Starting finance refinery — 2026-06-24
+  Loaded 20 prior pool states for temporal delta
+  Uniswap fetch failed: Uniswap API fetch failed: 403 
+  Fetched 20 pools/markets total
+  No centroid yet — shatter will be 0 until calibration run
+  Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-24.jsonl (20 records)
+  Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-24.sig
+  Refinery complete — 20 upserted, 0 errors
+  Starting finance refinery — 2026-06-25
+  Loaded 20 prior pool states for temporal delta
+  Uniswap fetch failed: Uniswap API fetch failed: 403 
+  Fetched 20 pools/markets total
+  No centroid yet — shatter will be 0 until calibration run
+  Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-25.jsonl (20 records)
+  Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-25.sig
+  Refinery complete — 20 upserted, 0 errors
+  Starting finance refinery — 2026-06-26
+  Loaded 20 prior pool states for temporal delta
+  Uniswap fetch failed: Uniswap API fetch failed: 403 
+  Fetched 20 pools/markets total
+  No centroid yet — shatter will be 0 until calibration run
+  Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-26.jsonl (20 records)
+  Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-26.sig
+  Refinery complete — 20 upserted, 0 errors
+  Starting finance refinery — 2026-06-27
+  Loaded 20 prior pool states for temporal delta
+  Uniswap fetch failed: Uniswap API fetch failed: 403 
+  Fetched 20 pools/markets total
+  No centroid yet — shatter will be 0 until calibration run
+  Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-27.jsonl (20 records)
+  Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-27.sig
+  Refinery complete — 20 upserted, 0 errors
+  Starting finance refinery — 2026-06-28
+  Loaded 20 prior pool states for temporal delta
+  Uniswap fetch failed: Uniswap API fetch failed: 403 
+  Fetched 20 pools/markets total
+  No centroid yet — shatter will be 0 until calibration run
+  Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-28.jsonl (20 records)
+  Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-28.sig
+  Refinery complete — 20 upserted, 0 errors
+  Starting finance refinery — 2026-06-29
+  Loaded 20 prior pool states for temporal delta
+  Uniswap fetch failed: Uniswap API fetch failed: 403 
+  Fetched 20 pools/markets total
+  No centroid yet — shatter will be 0 until calibration run
+  Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-29.jsonl (20 records)
+  Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-29.sig
+  Refinery complete — 20 upserted, 0 errors
+  Starting finance refinery — 2026-06-30
+  Loaded 20 prior pool states for temporal delta
+  Uniswap fetch failed: Uniswap API fetch failed: 403 
+  Fetched 20 pools/markets total
+  No centroid yet — shatter will be 0 until calibration run
+  Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-30.jsonl (20 records)
+  Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-06-30.sig
+  Refinery complete — 20 upserted, 0 errors
+  Starting finance refinery — 2026-07-01
+  Loaded 20 prior pool states for temporal delta
+  Uniswap fetch failed: Uniswap API fetch failed: 403 
+  Fetched 20 pools/markets total
+  No centroid yet — shatter will be 0 until calibration run
+  Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-01.jsonl (20 records)
+  Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-01.sig
+  Refinery complete — 20 upserted, 0 errors
+  Starting finance refinery — 2026-07-02
+  Loaded 20 prior pool states for temporal delta
+  Uniswap fetch failed: Uniswap API fetch failed: 403 
+  Fetched 20 pools/markets total
+  No centroid yet — shatter will be 0 until calibration run
+  Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-02.jsonl (20 records)
+  Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-02.sig
+  Refinery complete — 20 upserted, 0 errors
+  Starting finance refinery — 2026-07-03
+  Loaded 20 prior pool states for temporal delta
+  Uniswap fetch failed: Uniswap API fetch failed: 403 
+  Fetched 20 pools/markets total
+  No centroid yet — shatter will be 0 until calibration run
+  Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-03.jsonl (20 records)
+  Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-03.sig
+  Refinery complete — 20 upserted, 0 errors
+  Starting finance refinery — 2026-07-04
+  Loaded 20 prior pool states for temporal delta
+  Uniswap fetch failed: Uniswap API fetch failed: 403 
+  Fetched 20 pools/markets total
+  No centroid yet — shatter will be 0 until calibration run
+  Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-04.jsonl (20 records)
+  Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-04.sig
+  Refinery complete — 20 upserted, 0 errors
+  Starting finance refinery — 2026-07-05
+  Loaded 20 prior pool states for temporal delta
+  Uniswap fetch failed: Uniswap API fetch failed: 403 
+  Fetched 20 pools/markets total
+  No centroid yet — shatter will be 0 until calibration run
+  Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-05.jsonl (20 records)
+  Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-05.sig
+  Refinery complete — 20 upserted, 0 errors
+  Starting finance refinery — 2026-07-06
+  Loaded 20 prior pool states for temporal delta
+  Uniswap fetch failed: Uniswap API fetch failed: 403 
+  Fetched 20 pools/markets total
+  No centroid yet — shatter will be 0 until calibration run
+  Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-06.jsonl (20 records)
+  Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-06.sig
+  Refinery complete — 20 upserted, 0 errors
+  Starting finance refinery — 2026-07-07
+  Loaded 20 prior pool states for temporal delta
+  Uniswap fetch failed: Uniswap API fetch failed: 403 
+  Fetched 20 pools/markets total
+  No centroid yet — shatter will be 0 until calibration run
+  Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-07.jsonl (20 records)
+  Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-07.sig
+  Refinery complete — 20 upserted, 0 errors
+  Starting finance refinery — 2026-07-08
+  Loaded 20 prior pool states for temporal delta
+  Uniswap fetch failed: Uniswap API fetch failed: 403 
+  Fetched 20 pools/markets total
+  No centroid yet — shatter will be 0 until calibration run
+  Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-08.jsonl (20 records)
+  Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-08.sig
+  Refinery complete — 20 upserted, 0 errors
+  Starting finance refinery — 2026-07-09
+  Loaded 20 prior pool states for temporal delta
+  Uniswap fetch failed: Uniswap API fetch failed: 403 
+  Fetched 20 pools/markets total
+  No centroid yet — shatter will be 0 until calibration run
+  Pack written: /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-09.jsonl (20 records)
+  Pack signed:  /Users/joewales/spectral-terrain/store/finance-crypto-2026-07-09.sig
+  Refinery complete — 20 upserted, 0 errors
