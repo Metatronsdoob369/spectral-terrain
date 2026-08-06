@@ -235,6 +235,17 @@ function macOf(key: Buffer, value: string): string {
  * every mutable timestamp. Those are the moat and the liability, in that order.
  */
 export function projectTile(p: LivePoint, prevCid: string | null, o: ProjectOptions): Record<string, unknown> {
+  // The physics-deterministic warranty is the product. It is true only when
+  // the Roblox engine actually computed t+1. A placeholder or linear t+1 has
+  // zero temporal signal, and selling it under this claim is a lie the buyer
+  // cannot detect. Refuse at seal, upstream of any signature.
+  if (p.t_method !== undefined && p.t_method !== "physics-deterministic") {
+    throw new EmitRefusal(
+      "TPLUS1_NOT_DETERMINISTIC",
+      `point ${p.id} has t_method="${p.t_method}" — only engine-computed t+1 may be sealed`
+    );
+  }
+
   const raw = p.vector;
   const v: number[] = Array.isArray(raw) ? raw : raw ? (Object.values(raw)[0] ?? []) : [];
   const third = Math.floor(v.length / 3);
@@ -247,6 +258,17 @@ export function projectTile(p: LivePoint, prevCid: string | null, o: ProjectOpti
   const resNowPrev = sub(vNow, vPrev);
   const resNextNow = sub(vNext, vNow);
   const curvature = Math.sqrt(sub(resNextNow, resNowPrev).reduce((s, x) => s + x * x, 0));
+
+  // [v|v|v] is the placeholder signature: both residuals vanish, so the tile
+  // would carry a 3072-D concat with no transition in it at all.
+  const magPrev = Math.sqrt(resNowPrev.reduce((s, x) => s + x * x, 0));
+  const magNext = Math.sqrt(resNextNow.reduce((s, x) => s + x * x, 0));
+  if (magPrev === 0 && magNext === 0) {
+    throw new EmitRefusal(
+      "DEGENERATE_WINDOW",
+      `point ${p.id}: all three thirds identical — no temporal signal to sell`
+    );
+  }
 
   const tile: Record<string, unknown> = {
     schema: "terrain-tile-v1",
@@ -313,7 +335,7 @@ export function projectTile(p: LivePoint, prevCid: string | null, o: ProjectOpti
     },
   };
 
-  if (p.hamming_sig) {
+  if (p.hamming_sig && !/^0*$/.test(p.hamming_sig)) {
     // Zero-pad: the live index stores toString(16) unpadded (29–32 chars), and
     // Hamming distance across mismatched widths is silently wrong.
     tile.fingerprint = { family: "simhash128-fnv1a", bits: 128, hex: p.hamming_sig.padStart(32, "0").slice(-32) };
@@ -383,24 +405,49 @@ export function sealPack(
   return { edition, tileCount: tiles.length, datBytes: dat.length, merkleRoot: root.toString("hex"), manifestCid, outDir };
 }
 
-export function loadOrCreateSigner(outDir: string, signerId: string): string {
+/**
+ * Resolve a signing key, returning the PEM and the signer id actually used.
+ *
+ * A signer id must name exactly ONE key, forever. Two keys sharing an id is
+ * the rotation defect: every verifier holding the old key silently rejects
+ * packs signed by the new one (or worse, accepts whichever it saw first).
+ * So a freshly generated key gets an id suffixed with its own public-key
+ * fingerprint — a new key is structurally unable to squat an existing id.
+ */
+export function loadOrCreateSigner(outDir: string, signerId: string): { pem: string; signerId: string } {
   mkdirSync(outDir, { recursive: true });
   const keyPath = path.join(outDir, ".signing-key.pem");
   const trustPath = path.join(outDir, "terrain-keys.json");
-  if (existsSync(keyPath) && existsSync(trustPath)) return readFileSync(keyPath, "utf8");
+  const idPath = path.join(outDir, ".signer-id");
+
+  if (existsSync(keyPath) && existsSync(trustPath)) {
+    const known = existsSync(idPath) ? readFileSync(idPath, "utf8").trim() : signerId;
+    return { pem: readFileSync(keyPath, "utf8"), signerId: known };
+  }
+
   const { publicKey, privateKey } = generateKeyPairSync("ed25519");
   const pem = privateKey.export({ format: "pem", type: "pkcs8" }).toString();
+  const rawPub = publicKey.export({ format: "der", type: "spki" }).subarray(-32);
+  const fp = createHash("blake2b512").update(rawPub).digest().subarray(0, 4).toString("hex");
+
+  const trust = existsSync(trustPath) ? JSON.parse(readFileSync(trustPath, "utf8")) : {};
+  let id = signerId;
+  if (trust[id] && trust[id].public_key_b64 !== rawPub.toString("base64")) {
+    id = `${signerId}-${fp}`;
+    console.log(`  ⚠ signer "${signerId}" already names a different key — using "${id}"`);
+  }
+
   writeFileSync(keyPath, pem, { mode: 0o600 });
-  const existing = existsSync(trustPath) ? JSON.parse(readFileSync(trustPath, "utf8")) : {};
-  existing[signerId] = {
-    public_key_b64: publicKey.export({ format: "der", type: "spki" }).subarray(-32).toString("base64"),
+  writeFileSync(idPath, id + "\n");
+  trust[id] = {
+    public_key_b64: rawPub.toString("base64"),
     valid_from: new Date().toISOString(),
     valid_until: null,
     status: "active",
     scopes: ["tile", "pack", "status"],
   };
-  writeFileSync(trustPath, JSON.stringify(existing, null, 2) + "\n");
-  return pem;
+  writeFileSync(trustPath, JSON.stringify(trust, null, 2) + "\n");
+  return { pem, signerId: id };
 }
 
 // ─── CLI ──────────────────────────────────────────────────────────────────────
@@ -450,6 +497,7 @@ async function main(): Promise<void> {
   const tiles: Array<{ cid: string; bytes: Buffer }> = [];
   let prev: string | null = null;
   let skipped = 0;
+  const reasons = new Map<string, number>();
   for (const p of eligible) {
     try {
       const body = projectTile(p, prev, { domain, centroidCid, engineVersion, commitmentKeyId, commitmentKey });
@@ -459,10 +507,17 @@ async function main(): Promise<void> {
       prev = cid;
     } catch (e) {
       skipped++;
+      const code = e instanceof EmitRefusal ? e.code : "UNKNOWN";
+      reasons.set(code, (reasons.get(code) ?? 0) + 1);
       if (skipped <= 3) console.log(`  skip ${p.id}: ${(e as Error).message}`);
     }
   }
-  if (skipped) console.log(`  skipped ${skipped} point(s) that failed projection`);
+  if (skipped) {
+    console.log(`  skipped ${skipped} point(s):`);
+    for (const [code, n] of [...reasons.entries()].sort((a, b) => b[1] - a[1])) {
+      console.log(`    ${n.toString().padStart(6)}  ${code}`);
+    }
+  }
   if (!tiles.length) throw new EmitRefusal("NOTHING_TO_SEAL", "every point failed projection");
 
   const manifestBody = {
@@ -501,8 +556,9 @@ async function main(): Promise<void> {
     return;
   }
 
-  const pem = loadOrCreateSigner(outDir, signerId);
-  const r = sealPack(tiles, manifestBody, outDir, edition, signerId, pem);
+  const signer = loadOrCreateSigner(outDir, signerId);
+  const r = sealPack(tiles, manifestBody, outDir, edition, signer.signerId, signer.pem);
+  console.log(`  signed by   ${signer.signerId}`);
   console.log(`\nSealed ${r.edition}`);
   console.log(`  tiles       ${r.tileCount}`);
   console.log(`  dat         ${(r.datBytes / 1024).toFixed(1)} KB`);
