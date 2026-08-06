@@ -216,6 +216,7 @@ export interface ProjectOptions {
   domain: string;
   centroidCid: string;
   engineVersion: string;
+  embedModel: string;
   commitmentKeyId: string;
   /** Secret key for provenance MACs. Keyed, because an unkeyed digest over
    *  public-repo source is a brute-forceable confirmation oracle. */
@@ -339,6 +340,69 @@ export function projectTile(p: LivePoint, prevCid: string | null, o: ProjectOpti
     // Zero-pad: the live index stores toString(16) unpadded (29–32 chars), and
     // Hamming distance across mismatched widths is silently wrong.
     tile.fingerprint = { family: "simhash128-fnv1a", bits: 128, hex: p.hamming_sig.padStart(32, "0").slice(-32) };
+  }
+
+  assertNoForbiddenKeys(tile);
+  return tile;
+}
+
+/**
+ * Project a STATIC (non-temporal) terrain point.
+ *
+ * Static domains have no t±1, so there is no transition to sell. What is
+ * sellable is the position in the mapped space plus its geometric scores —
+ * and, where the source is public domain, the retrievable text itself.
+ *
+ * Locators (`path`, `source_url`, `shard_id`) are still refused: they are the
+ * map back to the corpus, which is the work product. `source` and `title`
+ * survive only as license facts.
+ */
+export function projectStaticTile(
+  p: LivePoint & Record<string, unknown>,
+  prevCid: string | null,
+  o: ProjectOptions & { spdx: string; sourceClass: "public-repo" | "synthetic" | "owner-authored"; includeText: boolean }
+): Record<string, unknown> {
+  const raw = p.vector;
+  const v: number[] = Array.isArray(raw) ? raw : raw ? (Object.values(raw)[0] ?? []) : [];
+  if (v.length === 0) throw new EmitRefusal("NO_VECTOR", `point ${p.id} has no stored vector`);
+
+  const text = typeof p.full_text === "string" ? p.full_text : typeof p.excerpt === "string" ? p.excerpt : "";
+  const norm = Math.sqrt(v.reduce((s, x) => s + x * x, 0));
+
+  const tile: Record<string, unknown> = {
+    schema: "terrain-tile-static-v1",
+    canon_version: 1,
+    domain: o.domain,
+    lineage_id: String(p.id),
+    prev_cid: prevCid,
+    geometry_profile: "static-position",
+    norm_convention: "unit-l2-kahan",
+    embed: { model: o.embedModel, dims: v.length, vector_norm: dec(norm, 8) },
+    position: vecref(v, "f32le"),
+    scores: {
+      heat: dec(p.heat ?? 0, 4),
+      shatter: dec(p.shatter ?? 0, 4),
+      shatter_scale: "l2-to-centroid",
+      centroid_cid: o.centroidCid,
+    },
+    novelty: { vs_prev_cid: prevCid, metric: "l2", value: prevCid === null ? null : dec(norm, 4) },
+    license: { spdx: o.spdx, source_class: o.sourceClass, derivative_release: o.includeText ? "text-and-geometry" : "geometry-only" },
+    commitments: {
+      source_mac_key_id: o.commitmentKeyId,
+      source_mac: macOf(o.commitmentKey, (p.provenanceHash as string) ?? (p.provenance_hash as string) ?? String(p.id)),
+      locator_mac_key_id: o.commitmentKeyId,
+      locator_mac: macOf(o.commitmentKey, `${(p as Record<string, unknown>).path ?? ""}#${(p as Record<string, unknown>).shard_id ?? ""}`),
+    },
+    redaction: {
+      source_locator_withheld: 2,
+      ...(o.includeText ? {} : { source_text_withheld: 1 }),
+    },
+  };
+
+  // Public-domain corpora may ship the retrievable text — that IS the product
+  // for a retrieval endpoint. Anything else ships geometry only.
+  if (o.includeText && text) {
+    tile.content = { text, chars: text.length };
   }
 
   assertNoForbiddenKeys(tile);
@@ -469,8 +533,12 @@ async function main(): Promise<void> {
   const engineVersion = arg("engine-version", "0.634.0.6340420")!;
   const collection = arg("collection", "spectral-heatmap")!;
   const filterByDomain = !has("no-domain-filter");
+  const profile = (arg("profile", "temporal") as "temporal" | "static");
+  const embedModel = arg("embed-model", profile === "static" ? "nomic-embed-text" : "mxbai-embed-large")!;
+  const spdx = arg("spdx", "MIT")!;
+  const includeText = has("include-text");
 
-  console.log(`pack-emitter — domain=${domain} edition=${edition}${dryRun ? " (dry run)" : ""}`);
+  console.log(`pack-emitter — domain=${domain} edition=${edition} profile=${profile}${dryRun ? " (dry run)" : ""}`);
 
   console.log(`  collection=${collection} domain-filter=${filterByDomain}`);
   const live = await scrollTerrain(domain, limit, collection, filterByDomain);
@@ -482,9 +550,12 @@ async function main(): Promise<void> {
 
   // Only canonical points are sellable. A shattered point is, by definition,
   // one the refinery flagged as drifting from the corpus.
-  const eligible = allowUncanonical ? live : live.filter((p) => p.kind === "canonical");
+  const eligible =
+    allowUncanonical || profile === "static"
+      ? live
+      : live.filter((p) => p.kind === "canonical");
   console.log(`  ${eligible.length} eligible (${live.length - eligible.length} excluded as non-canonical)`);
-  if (!eligible.length) throw new EmitRefusal("NO_CANONICAL", "no canonical points — run calibrate first, or pass --allow-uncanonical");
+  if (!eligible.length) throw new EmitRefusal("NO_CANONICAL", "no eligible points — run calibrate first, or pass --allow-uncanonical");
 
   const commitmentKeyId = "nodeout-prov-2026a";
   const commitmentKey = Buffer.from(process.env.TERRAIN_COMMITMENT_KEY ?? "dev-only-commitment-key-rotate-before-sale", "utf8");
@@ -500,7 +571,16 @@ async function main(): Promise<void> {
   const reasons = new Map<string, number>();
   for (const p of eligible) {
     try {
-      const body = projectTile(p, prev, { domain, centroidCid, engineVersion, commitmentKeyId, commitmentKey });
+      const opts = { domain, centroidCid, engineVersion, embedModel, commitmentKeyId, commitmentKey };
+      const body =
+        profile === "static"
+          ? projectStaticTile(p as LivePoint & Record<string, unknown>, prev, {
+              ...opts,
+              spdx,
+              sourceClass: "public-repo" as const,
+              includeText,
+            })
+          : projectTile(p, prev, opts);
       const bytes = canonicalize(body);
       const cid = cidOfBytes(bytes);
       tiles.push({ cid, bytes });
@@ -529,14 +609,22 @@ async function main(): Promise<void> {
     snapshot: { cut_at: new Date().toISOString(), window_from: new Date().toISOString(), window_to: new Date().toISOString() },
     prev_pack_cid: null,
     payload_content_type: "application/json",
-    geometry: {
-      profile: "transition-only",
-      embed_model: "mxbai-embed-large",
-      dim_per_third: 1024,
-      concat_dim: 3072,
-      norm_convention: "per-third-unit-kahan",
-      shatter_scale: "concat-sqrt3-l2",
-    },
+    geometry:
+      profile === "static"
+        ? {
+            profile: "static-position",
+            embed_model: embedModel,
+            norm_convention: "unit-l2-kahan",
+            shatter_scale: "l2-to-centroid",
+          }
+        : {
+            profile: "transition-only",
+            embed_model: embedModel,
+            dim_per_third: 1024,
+            concat_dim: 3072,
+            norm_convention: "per-third-unit-kahan",
+            shatter_scale: "concat-sqrt3-l2",
+          },
     centroid: { centroid_cid: centroidCid, corpus_size: eligible.length, stability: null, stability_target: "0.008" },
     // Content-addressed retrieval only. No threshold is claimed, so no
     // calibration claim is made — the kNN gate stays out of the sold surface
@@ -544,10 +632,16 @@ async function main(): Promise<void> {
     silence: { gate: "exact-match", signal: "content-address" },
     confidence_model: null,
     knn: null,
-    license_summary: { spdx_counts: { MIT: tiles.length }, derivative_release: "geometry-only" },
+    license_summary: {
+      spdx_counts: { [spdx]: tiles.length },
+      derivative_release: profile === "static" && includeText ? "text-and-geometry" : "geometry-only",
+    },
     redaction_totals: { source_text_withheld: tiles.length, source_locator_withheld: tiles.length },
     status_list_ref: `${domain}-status`,
-    carrier_note: "Physics-deterministic state transitions. t+1 is engine-computed, not modeled.",
+    carrier_note:
+      profile === "static"
+        ? `Static ${domain} terrain: mapped position plus geometric scores.`
+        : "Physics-deterministic state transitions. t+1 is engine-computed, not modeled.",
   };
 
   if (dryRun) {
