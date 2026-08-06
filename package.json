@@ -1,7 +1,7 @@
 {
   "name": "@nodeout/spectral-terrain",
   "version": "0.1.1",
-  "description": "Temporal Geometric Intelligence Layer — proprietary NODE OUT",
+  "description": "Temporal Geometric Intelligence Layer \u2014 proprietary NODE OUT",
   "type": "module",
   "private": true,
   "scripts": {
@@ -16,7 +16,7 @@
     "drift": "tsx engine/drift-sidecar.ts",
     "integrity": "tsx engine/terrain-integrity.ts",
     "ci": "npm run test && npm run integrity",
-    "promote": "npm run ci && echo 'CI gate passed — terrain is promotion-ready'",
+    "promote": "npm run ci && echo 'CI gate passed \u2014 terrain is promotion-ready'",
     "watchdog": "tsx engine/watchdog.ts --mode observe",
     "watchdog:enforce": "tsx engine/watchdog.ts --mode enforce",
     "threat-intake": "tsx engine/threat-intake.ts",
@@ -33,7 +33,9 @@
     "circadian:finance": "tsx engine/circadian.ts --domain finance-crypto",
     "navigate:finance": "tsx engine/navigate-finance.ts",
     "ingest:finance": "tsx scripts/ingest-finance-heatmap.ts",
-    "ingest:finance:dry": "tsx scripts/ingest-finance-heatmap.ts --dry-run"
+    "ingest:finance:dry": "tsx scripts/ingest-finance-heatmap.ts --dry-run",
+    "emit:pack": "tsx engine/pack-emitter.ts",
+    "emit:pack:dry": "tsx engine/pack-emitter.ts --dry-run"
   },
   "dependencies": {
     "zod": "^3.25.76"
