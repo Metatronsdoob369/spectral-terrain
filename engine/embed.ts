@@ -12,7 +12,9 @@ import type { TemporalVector } from "../contracts/terrain.contract.js";
 const OLLAMA_URL = process.env.OLLAMA_URL || "http://127.0.0.1:11434";
 const EMBED_MODEL = process.env.EMBED_MODEL || "mxbai-embed-large";
 const EMBED_DIM = parseInt(process.env.EMBED_DIM || "1024", 10);
-const EMBED_PROVIDER = process.env.EMBED_PROVIDER || "ollama"; // ollama | hf
+const EMBED_PROVIDER = process.env.EMBED_PROVIDER || "ollama"; // ollama | hf | structural | gemini
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || "";
+const GEMINI_EMBED_MODEL = process.env.GEMINI_EMBED_MODEL || "gemini-embedding-2"; // GA (preview restricted as of 2026-08-24)
 const HF_API_URL = process.env.HF_API_URL || "https://api-inference.huggingface.co/pipeline/feature-extraction";
 const HF_TOKEN = process.env.HF_TOKEN;
 
@@ -38,11 +40,33 @@ function chunkText(text: string): string[] {
   return chunks.length > 0 ? chunks : [text];
 }
 
-/** Embed with automatic word-based chunking + max-magnitude pooling */
+/** Embed with word-based chunking, bounded-concurrency pooling + max-magnitude pooling */
+const EMBED_CONCURRENCY = parseInt(process.env.EMBED_CONCURRENCY || "6", 10);
+
+async function poolLimited<T, R>(items: T[], limit: number, fn: (item: T) => Promise<R>): Promise<R[]> {
+  const results = new Array<R>(items.length);
+  let cursor = 0;
+  async function worker() {
+    while (cursor < items.length) {
+      const idx = cursor++;
+      results[idx] = await fn(items[idx]);
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
+  return results;
+}
+
 export async function embed(text: string): Promise<number[]> {
+  // STRUCTURAL: fingerprint the WHOLE text — no chunking, no pooling, no network
+  if (EMBED_PROVIDER === "structural") {
+    return structuralFingerprint(text);
+  }
   const chunks = chunkText(text);
   if (chunks.length === 1) return embedChunk(chunks[0]);
-  const vecs = await Promise.all(chunks.map(embedChunk));
+  // BOUNDED CONCURRENCY — never fire unbounded Promise.all at local Ollama.
+  // Large files (e.g. minified bundles) can produce thousands of chunks;
+  // flooding a single-threaded Ollama wedges its request queue solid.
+  const vecs = await poolLimited(chunks, EMBED_CONCURRENCY, embedChunk);
   return maxMagnitudePool(vecs);
 }
 
@@ -52,6 +76,12 @@ function sanitizeForEmbed(text: string): string {
 }
 
 async function embedChunk(text: string): Promise<number[]> {
+  if (EMBED_PROVIDER === "structural") {
+    return structuralFingerprint(text);
+  }
+  if (EMBED_PROVIDER === "gemini") {
+    return embedChunkGemini(text);
+  }
   const safe = sanitizeForEmbed(text);
   if (EMBED_PROVIDER === "hf") {
     return embedChunkHF(safe);
@@ -59,11 +89,65 @@ async function embedChunk(text: string): Promise<number[]> {
   return embedChunkOllama(safe);
 }
 
+// Gemini embedding (native 3072-D, MRL outputDimensionality supported).
+// For temporal domains: request EMBED_DIM (1024) slices per snapshot and
+// concat [v_t-1 | v_t | v_t+1] -> 3072 per the terrain contract.
+async function embedChunkGemini(text: string): Promise<number[]> {
+  if (!GEMINI_API_KEY) throw new Error("GEMINI_API_KEY not set");
+  const body: Record<string, unknown> = {
+    model: `models/${GEMINI_EMBED_MODEL}`,
+    content: { parts: [{ text }] },
+  };
+  if (EMBED_DIM !== 3072) body.outputDimensionality = EMBED_DIM; // MRL slice
+  // 30s abort — same hang-protection discipline as the Ollama path
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_EMBED_MODEL}:embedContent?key=${GEMINI_API_KEY}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(30_000),
+    },
+  );
+  if (!res.ok) throw new Error(`Gemini embed failed: ${res.status} ${res.statusText}`);
+  const data = (await res.json()) as { embedding: { values: number[] } };
+  const vec = data.embedding?.values;
+  if (!vec || vec.length !== EMBED_DIM) throw new Error(`Expected ${EMBED_DIM}-D, got ${vec?.length ?? 0}-D`);
+  return l2Normalize(vec);
+}
+
+// ─────────────────────────────────────────────────────────────────
+// STRUCTURAL PROVIDER — 0-dim philosophy, 5 dimensions
+// Ported from cartographer-mcp-publish/cartographer-0dim-injector.ts.
+// Deterministic pseudo-embedding: zero network, zero model, near-instant.
+// Log-scaling keeps any single dimension from dominating the geometry.
+// ─────────────────────────────────────────────────────────────────
+
+function structuralFingerprint(text: string): number[] {
+  const chars = text.length;
+  let hash = 0;
+  for (let i = 0; i < text.length; i++) hash = Math.imul(31, hash) + text.charCodeAt(i) | 0;
+  const lines = text.split("\n").length;
+  const defs = (text.match(/\b(function|def|class|struct|impl|interface|type|fn)\b/g) || []).length;
+  const imports = (text.match(/\b(import|from|require|include|use)\b/g) || []).length;
+
+  const vec = [
+    Math.log1p(chars),                        // d1 size
+    (Math.abs(hash) % 1000) / 1000,           // d2 complexity hash (cartographer lineage)
+    Math.log1p(lines),                        // d3 structure
+    Math.log1p(defs),                         // d4 definition density
+    Math.log1p(imports),                      // d5 coupling
+  ];
+  return EMBED_DIM === vec.length ? l2Normalize(vec) : vec.slice(0, Math.min(EMBED_DIM, vec.length));
+}
+
 async function embedChunkOllama(text: string): Promise<number[]> {
+  // 30s abort — a hung request must fail fast so ingest moves on, not freezes
   const res = await fetch(`${OLLAMA_URL}/api/embed`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ model: EMBED_MODEL, input: text }),
+    signal: AbortSignal.timeout(30_000),
   });
   if (!res.ok) throw new Error(`Ollama embed failed: ${res.statusText}`);
   const data = await res.json() as { embeddings: number[][] };

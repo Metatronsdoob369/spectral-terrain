@@ -1,0 +1,1 @@
+{"date":"2026-08-25","sig":"d4e97b3f717076b0f0d0f0ee8c647424894ea7ec1a0faa1d9fd747ea61320a148334dab9f397bcc1a029f1228d5cfeb8b9a3bde3667a82dac1bfc3bbab7ea149","algo":"blake2b512","points":11}

@@ -1,6 +1,8 @@
 {
-  "timestamp": "2026-05-22T17:38:13.715Z",
-  "domain": null,
+  "timestamp": "2026-08-23T20:34:36.893Z",
+  "domain": "source-audit",
+  "activeCollection": "spectral-heatmap",
+  "activeEmbedDim": 1024,
   "status": "clean",
   "counters": {
     "queued": 36,
@@ -9,5 +11,6 @@
     "miss": 0,
     "error": 0
   },
-  "drift": null
+  "drift": null,
+  "nomic768": null
 }

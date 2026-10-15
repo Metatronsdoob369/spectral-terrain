@@ -88,7 +88,8 @@ function preIngestFilter(source: string): { text: string; stripped: number } {
 
 function walkRepo(rootPath: string, extensions: string[]): string[] {
   const files: string[] = [];
-  const SKIP_DIRS = new Set(["node_modules", ".git", "dist", ".next", "build", "__pycache__", "venv", "plugins"]);
+  const SKIP_DIRS = new Set(["node_modules", ".git", "dist", ".next", "build", "__pycache__", "venv", "plugins", "web_dist", "release", "coverage"]);
+  const MAX_FILE_BYTES = parseInt(process.env.MAX_FILE_BYTES || "131072", 10); // 128KB — minified bundles/god-files have no terrain value and can flood the embedder
 
   function walk(dir: string) {
     for (const entry of readdirSync(dir)) {
@@ -98,12 +99,23 @@ function walkRepo(rootPath: string, extensions: string[]): string[] {
       if (stat.isDirectory()) {
         walk(full);
       } else if (extensions.includes(extname(entry)) && !entry.endsWith('.d.ts') && !entry.endsWith('.js.map')) {
+        if (stat.size > MAX_FILE_BYTES) {
+          process.stderr.write(`   [skip] ${relative(rootPath, full)} — ${(stat.size / 1048576).toFixed(1)}MB exceeds ${MAX_FILE_BYTES / 1024}KB cap\n`);
+          continue;
+        }
         files.push(full);
       }
     }
   }
   walk(rootPath);
   return files;
+}
+
+/** Deterministic point ID — same domain+file always maps to the same UUID,
+ *  so re-ingests UPSERT (overwrite) instead of duplicating ghost points. */
+function deterministicId(domain: Domain, relPath: string): string {
+  const h = createHash("sha512").update(`${domain}::${relPath}`).digest("hex").slice(0, 32);
+  return `${h.slice(0, 8)}-${h.slice(8, 12)}-${h.slice(12, 16)}-${h.slice(16, 20)}-${h.slice(20, 32)}`;
 }
 
 // ─────────────────────────────────────────────────────────────────
@@ -226,7 +238,10 @@ function extractGameState(source: string, fileName: string): GameState | null {
 }
 
 export async function ingestRepo(repoPath: string, domain: Domain, markAsCanonical = false) {
-  await waitForOllama();
+  // Structural & Gemini providers never touch Ollama — skip the readiness gate
+  if (process.env.EMBED_PROVIDER !== "structural" && process.env.EMBED_PROVIDER !== "gemini") {
+    await waitForOllama();
+  }
   await acquireLock();
   await ensureCollection(domain);
 
@@ -301,7 +316,7 @@ export async function ingestRepo(repoPath: string, domain: Domain, markAsCanonic
       }
 
       const point: TerrainPoint = {
-        id:             randomUUID(),
+        id:             deterministicId(domain, relative(repoPath, file)),
         domain,
         file:           relative(repoPath, file),
         kind,

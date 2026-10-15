@@ -1,0 +1,122 @@
+{
+  "hypothesis": "static NAICS sector geometry is low-rank; 1024-D is waste",
+  "unit": "one vector per sector (n=20)",
+  "probes": [
+    {
+      "q": "commercial banking and credit intermediation",
+      "expected": "52"
+    },
+    {
+      "q": "crude petroleum oil and gas extraction",
+      "expected": "21"
+    },
+    {
+      "q": "general medical and surgical hospitals",
+      "expected": "62"
+    },
+    {
+      "q": "electric power generation and distribution",
+      "expected": "22"
+    },
+    {
+      "q": "residential building construction contractors",
+      "expected": "23"
+    },
+    {
+      "q": "legal services and accounting",
+      "expected": "54"
+    },
+    {
+      "q": "crop production and farming",
+      "expected": "11"
+    },
+    {
+      "q": "real estate property managers and lessors",
+      "expected": "53"
+    }
+  ],
+  "A_industry_signal": {
+    "native": {
+      "dim": 20,
+      "recall@1": 0.875,
+      "recall@3": 1.0,
+      "hits@1": 7,
+      "hits@3": 8
+    }
+  },
+  "B_structural": {
+    "native": {
+      "dim": 3,
+      "recall@1": 0.0,
+      "recall@3": 0.0,
+      "hits@1": 0,
+      "hits@3": 0
+    }
+  },
+  "C_embed_pca": {
+    "native": {
+      "dim": 1024,
+      "recall@1": 1.0,
+      "recall@3": 1.0,
+      "hits@1": 8,
+      "hits@3": 8
+    },
+    "pca-8": {
+      "dim": 8,
+      "recall@1": 0.875,
+      "recall@3": 1.0,
+      "hits@1": 7,
+      "hits@3": 8,
+      "energy_retained": 0.6237
+    },
+    "pca-16": {
+      "dim": 16,
+      "recall@1": 1.0,
+      "recall@3": 1.0,
+      "hits@1": 8,
+      "hits@3": 8,
+      "energy_retained": 0.9401
+    },
+    "pca-32": {
+      "dim": 32,
+      "recall@1": 1.0,
+      "recall@3": 1.0,
+      "hits@1": 8,
+      "hits@3": 8,
+      "energy_retained": 1.0
+    },
+    "pca-64": {
+      "dim": 64,
+      "recall@1": 1.0,
+      "recall@3": 1.0,
+      "hits@1": 8,
+      "hits@3": 8,
+      "energy_retained": 1.0
+    },
+    "pca-128": {
+      "dim": 128,
+      "recall@1": 1.0,
+      "recall@3": 1.0,
+      "hits@1": 8,
+      "hits@3": 8,
+      "energy_retained": 1.0
+    },
+    "pca-256": {
+      "dim": 256,
+      "recall@1": 1.0,
+      "recall@3": 1.0,
+      "hits@1": 8,
+      "hits@3": 8,
+      "energy_retained": 1.0
+    },
+    "pca-1024": {
+      "dim": 1024,
+      "recall@1": 1.0,
+      "recall@3": 1.0,
+      "hits@1": 8,
+      "hits@3": 8,
+      "energy_retained": 1.0
+    }
+  },
+  "generated_at": "2026-07-26T13:22:09Z"
+}

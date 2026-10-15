@@ -1,0 +1,295 @@
+{
+  "schema": "naics_heatmap.v1",
+  "generated_at": "2026-07-26T10:46:14Z",
+  "shard_count": 22,
+  "tau": 0.05,
+  "knn": 6,
+  "eigval_range": [
+    -2.4286128663679007e-16,
+    1.096626864668165
+  ],
+  "heat_mean": 0.5249773431890412,
+  "heat_std": 0.04698466257753009,
+  "shards": [
+    {
+      "id": "naics2022_introduction",
+      "title": "Introduction",
+      "source": "2022_NAICS_Manual.pdf",
+      "heat_score": 0.5971798009213743,
+      "spectral_band": "settled",
+      "meta": {
+        "role": "supporting"
+      }
+    },
+    {
+      "id": "naics2022_sector_11",
+      "title": "Sector 11 \u2014 Agriculture, Forestry, Fishing and Hunting",
+      "source": "2022_NAICS_Manual.pdf",
+      "heat_score": 0.5915416518159122,
+      "spectral_band": "settled",
+      "meta": {
+        "naics_sector": "11",
+        "sector_title": "Agriculture, Forestry, Fishing and Hunting",
+        "char_count": 66305,
+        "from_chapter": "naics2022_8a19163d8451_ch6"
+      }
+    },
+    {
+      "id": "naics2022_sector_21",
+      "title": "Sector 21 \u2014 Mining, Quarrying, and Oil and Gas Extraction",
+      "source": "2022_NAICS_Manual.pdf",
+      "heat_score": 0.5784955861868466,
+      "spectral_band": "settled",
+      "meta": {
+        "naics_sector": "21",
+        "sector_title": "Mining, Quarrying, and Oil and Gas Extraction",
+        "char_count": 40939,
+        "from_chapter": "naics2022_8a19163d8451_ch6"
+      }
+    },
+    {
+      "id": "naics2022_sector_53",
+      "title": "Sector 53 \u2014 Real Estate and Rental and Leasing",
+      "source": "2022_NAICS_Manual.pdf",
+      "heat_score": 0.5784426071588178,
+      "spectral_band": "settled",
+      "meta": {
+        "naics_sector": "53",
+        "sector_title": "Real Estate and Rental and Leasing",
+        "char_count": 43064,
+        "from_chapter": "naics2022_8a19163d8451_ch6"
+      }
+    },
+    {
+      "id": "naics2022_sector_62",
+      "title": "Sector 62 \u2014 Health Care and Social Assistance",
+      "source": "2022_NAICS_Manual.pdf",
+      "heat_score": 0.5674406246349413,
+      "spectral_band": "settled",
+      "meta": {
+        "naics_sector": "62",
+        "sector_title": "Health Care and Social Assistance",
+        "char_count": 70765,
+        "from_chapter": "naics2022_8a19163d8451_ch6"
+      }
+    },
+    {
+      "id": "naics2022_sector_23",
+      "title": "Sector 23 \u2014 Construction",
+      "source": "2022_NAICS_Manual.pdf",
+      "heat_score": 0.5673682599910184,
+      "spectral_band": "settled",
+      "meta": {
+        "naics_sector": "23",
+        "sector_title": "Construction",
+        "char_count": 69471,
+        "from_chapter": "naics2022_8a19163d8451_ch6"
+      }
+    },
+    {
+      "id": "naics2022_sector_61",
+      "title": "Sector 61 \u2014 Educational Services",
+      "source": "2022_NAICS_Manual.pdf",
+      "heat_score": 0.5589763475102347,
+      "spectral_band": "settled",
+      "meta": {
+        "naics_sector": "61",
+        "sector_title": "Educational Services",
+        "char_count": 29513,
+        "from_chapter": "naics2022_8a19163d8451_ch6"
+      }
+    },
+    {
+      "id": "naics2022_sector_31_33",
+      "title": "Sector 31-33 \u2014 Manufacturing",
+      "source": "2022_NAICS_Manual.pdf",
+      "heat_score": 0.5477527592100572,
+      "spectral_band": "active",
+      "meta": {
+        "naics_sector": "31-33",
+        "sector_title": "Manufacturing",
+        "char_count": 556895,
+        "from_chapter": "naics2022_8a19163d8451_ch6"
+      }
+    },
+    {
+      "id": "naics2022_sector_22",
+      "title": "Sector 22 \u2014 Utilities",
+      "source": "2022_NAICS_Manual.pdf",
+      "heat_score": 0.5354650759913828,
+      "spectral_band": "contested",
+      "meta": {
+        "naics_sector": "22",
+        "sector_title": "Utilities",
+        "char_count": 15047,
+        "from_chapter": "naics2022_8a19163d8451_ch6"
+      }
+    },
+    {
+      "id": "naics2022_sector_54",
+      "title": "Sector 54 \u2014 Professional, Scientific, and Technical Services",
+      "source": "2022_NAICS_Manual.pdf",
+      "heat_score": 0.5338433260388342,
+      "spectral_band": "contested",
+      "meta": {
+        "naics_sector": "54",
+        "sector_title": "Professional, Scientific, and Technical Services",
+        "char_count": 86749,
+        "from_chapter": "naics2022_8a19163d8451_ch6"
+      }
+    },
+    {
+      "id": "naics2022_sector_55",
+      "title": "Sector 55 \u2014 Management of Companies and Enterprises",
+      "source": "2022_NAICS_Manual.pdf",
+      "heat_score": 0.5299605011724199,
+      "spectral_band": "contested",
+      "meta": {
+        "naics_sector": "55",
+        "sector_title": "Management of Companies and Enterprises",
+        "char_count": 8681,
+        "from_chapter": "naics2022_8a19163d8451_ch6"
+      }
+    },
+    {
+      "id": "naics2022_2022_naics_united_states_structure",
+      "title": "2022 NAICS United States Structure",
+      "source": "2022_NAICS_Manual.pdf",
+      "heat_score": 0.5298880141481658,
+      "spectral_band": "contested",
+      "meta": {
+        "role": "supporting"
+      }
+    },
+    {
+      "id": "naics2022_sector_42",
+      "title": "Sector 42 \u2014 Wholesale Trade",
+      "source": "2022_NAICS_Manual.pdf",
+      "heat_score": 0.5234291996577914,
+      "spectral_band": "contested",
+      "meta": {
+        "naics_sector": "42",
+        "sector_title": "Wholesale Trade",
+        "char_count": 99670,
+        "from_chapter": "naics2022_8a19163d8451_ch6"
+      }
+    },
+    {
+      "id": "naics2022_sector_48_49",
+      "title": "Sector 48-49 \u2014 Transportation and Warehousing",
+      "source": "2022_NAICS_Manual.pdf",
+      "heat_score": 0.5230517652395681,
+      "spectral_band": "contested",
+      "meta": {
+        "naics_sector": "48-49",
+        "sector_title": "Transportation and Warehousing",
+        "char_count": 101552,
+        "from_chapter": "naics2022_8a19163d8451_ch6"
+      }
+    },
+    {
+      "id": "naics2022_sector_56",
+      "title": "Sector 56 \u2014 Administrative and Support and Waste Management and",
+      "source": "2022_NAICS_Manual.pdf",
+      "heat_score": 0.5045703235962958,
+      "spectral_band": "active",
+      "meta": {
+        "naics_sector": "56",
+        "sector_title": "Administrative and Support and Waste Management and",
+        "char_count": 82834,
+        "from_chapter": "naics2022_8a19163d8451_ch6"
+      }
+    },
+    {
+      "id": "naics2022_sector_51",
+      "title": "Sector 51 \u2014 Information",
+      "source": "2022_NAICS_Manual.pdf",
+      "heat_score": 0.5008177640817209,
+      "spectral_band": "noise",
+      "meta": {
+        "naics_sector": "51",
+        "sector_title": "Information",
+        "char_count": 72279,
+        "from_chapter": "naics2022_8a19163d8451_ch6"
+      }
+    },
+    {
+      "id": "naics2022_sector_71",
+      "title": "Sector 71 \u2014 Arts, Entertainment, and Recreation",
+      "source": "2022_NAICS_Manual.pdf",
+      "heat_score": 0.49491953305309905,
+      "spectral_band": "noise",
+      "meta": {
+        "naics_sector": "71",
+        "sector_title": "Arts, Entertainment, and Recreation",
+        "char_count": 46412,
+        "from_chapter": "naics2022_8a19163d8451_ch6"
+      }
+    },
+    {
+      "id": "naics2022_sector_72",
+      "title": "Sector 72 \u2014 Accommodation and Food Services",
+      "source": "2022_NAICS_Manual.pdf",
+      "heat_score": 0.48363352151382843,
+      "spectral_band": "noise",
+      "meta": {
+        "naics_sector": "72",
+        "sector_title": "Accommodation and Food Services",
+        "char_count": 28876,
+        "from_chapter": "naics2022_8a19163d8451_ch6"
+      }
+    },
+    {
+      "id": "naics2022_sector_92",
+      "title": "Sector 92 \u2014 Public Administration",
+      "source": "2022_NAICS_Manual.pdf",
+      "heat_score": 0.48059839759253914,
+      "spectral_band": "noise",
+      "meta": {
+        "naics_sector": "92",
+        "sector_title": "Public Administration",
+        "char_count": 40068,
+        "from_chapter": "naics2022_8a19163d8451_ch6"
+      }
+    },
+    {
+      "id": "naics2022_sector_44_45",
+      "title": "Sector 44-45 \u2014 Retail Trade",
+      "source": "2022_NAICS_Manual.pdf",
+      "heat_score": 0.46346209598062116,
+      "spectral_band": "noise",
+      "meta": {
+        "naics_sector": "44-45",
+        "sector_title": "Retail Trade",
+        "char_count": 95290,
+        "from_chapter": "naics2022_8a19163d8451_ch6"
+      }
+    },
+    {
+      "id": "naics2022_sector_81",
+      "title": "Sector 81 \u2014 Other Services (except Public Administration)",
+      "source": "2022_NAICS_Manual.pdf",
+      "heat_score": 0.4323824143985879,
+      "spectral_band": "noise",
+      "meta": {
+        "naics_sector": "81",
+        "sector_title": "Other Services (except Public Administration)",
+        "char_count": 71508,
+        "from_chapter": "naics2022_8a19163d8451_ch6"
+      }
+    },
+    {
+      "id": "naics2022_sector_52",
+      "title": "Sector 52 \u2014 Finance and Insurance",
+      "source": "2022_NAICS_Manual.pdf",
+      "heat_score": 0.4262819802648484,
+      "spectral_band": "noise",
+      "meta": {
+        "naics_sector": "52",
+        "sector_title": "Finance and Insurance",
+        "char_count": 61439,
+        "from_chapter": "naics2022_8a19163d8451_ch6"
+      }
+    }
+  ]
+}

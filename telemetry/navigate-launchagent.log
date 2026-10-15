@@ -159,3 +159,1137 @@
   Finding 5 lowest-shatter entry points...
   No finance-crypto terrain points found — calibration run needed first
   Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-07-11
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-07-12
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-07-13
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-07-14
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-07-15
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-07-16
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-07-17
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-07-19
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-07-20
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-07-21
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-07-22
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-07-23
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-07-24
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-07-25
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-07-26
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-07-27
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-07-28
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-07-29
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-07-30
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-07-31
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-08-01
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-08-02
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-08-03
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-08-04
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-08-05
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-08-06
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-08-07
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-08-08
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-08-09
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-08-10
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-08-11
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-08-12
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-08-13
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-08-14
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-08-15
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-08-16
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-08-17
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-08-18
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-08-19
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-08-20
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-08-21
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-08-22
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-08-23
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-08-24
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-08-25
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-08-26
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-08-27
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-08-28
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-08-29
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-08-30
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-08-31
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-09-01
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-09-02
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-09-03
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-09-04
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-09-05
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-09-06
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-09-07
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-09-08
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-09-09
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-09-10
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-09-11
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-09-12
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-09-13
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-09-14
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-09-15
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-09-16
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-09-17
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-09-18
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-09-19
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-09-20
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-09-21
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-09-22
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-09-23
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-09-24
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-09-25
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-09-26
+  Pack signature verified
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-09-28
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-09-29
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-09-30
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-10-01
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-10-02
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-10-03
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-10-04
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-10-05
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-10-06
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-10-07
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-10-08
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-10-09
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-10-10
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:6340
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16) {
+    errno: -61,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 6340
+  }
+}
+
+Node.js v26.0.0
+
+[navigate-finance] Instinct formation — 2026-10-11
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-10-12
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-10-13
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance
+
+[navigate-finance] Instinct formation — 2026-10-14
+  WARNING: terrain pack missing or signature mismatch — navigating unverified terrain
+
+  Finding 5 lowest-shatter entry points...
+  No finance-crypto terrain points found — calibration run needed first
+  Run: npm run calibrate:finance

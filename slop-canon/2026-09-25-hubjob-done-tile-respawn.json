@@ -1,0 +1,19 @@
+{
+  "title": "Hubjob done-tile respawn",
+  "errorSignature": "done-tile-without-ack-respawn",
+  "errorType": "done-tile-without-ack-respawn",
+  "domain": "hubjob-board",
+  "createdAt": "2026-09-25T03:40:00-05:00",
+  "source": "hubjob kanban board hubjob, task t_f11458a5 Site Plan, runs 4/11/12",
+  "badPattern": "A job that already closed looks like every other green tile. The page can reopen it with a status click. A worker that exits cleanly without closing the card is counted as a crash and started again. A dead run left marked running makes the next dispatch start nobody. The person sees no finish and no failure.",
+  "incident": "Site Plan closed properly on 2026-09-23 (run 4, site-plan.md attached). Later UI status writes reopened it. Run 11 exited 0 without kanban_complete, kanban_block, or kanban_request_review and was recorded as a protocol-violation crash. Run 12 was spawned immediately, the worker process died, and the run row stayed running, so the 03:32 dispatch returned Spawned 0. Page Builder (t_e6395df5 run 20) died the same clean-exit way. Live Deploy (t_693a9133 run 21) exited 1 after a real netlify deploy attempt. Plan & Contracts (t_f1559c04 run 22) exited 1 because hermes_cli.main was not found. Board not cleared.",
+  "whereNotToGo": [
+    "Do not paint a closed job with the same green as a waiting tile.",
+    "Do not let a status click reopen a closed job without an acknowledgment.",
+    "Do not count a clean exit that skipped the close call as a reason to start the same job again.",
+    "Do not leave a dead worker's run row marked running.",
+    "Do not start a second attempt of a succeeded job, or of one that smells like it, without a confirm."
+  ],
+  "verifiedFix": null,
+  "correction": "Unset. Proposed, not built: an unacknowledged finish dims the rest and chases a sharp green tracer on that card until it is selected. Same-job retry stays blocked until that acknowledgment. A smell-alike attempt inside 24 hours asks once: already succeeded at something like this, deploy anyway? Yes runs it. No leaves it."
+}

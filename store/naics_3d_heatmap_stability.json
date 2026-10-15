@@ -1,0 +1,136 @@
+{
+  "claim": "With Textual-style 3-D display geometry, NAICS heat stays stable",
+  "A_industry_pca3": {
+    "name": "A) industry-signal \u2192 PCA-3",
+    "heat_cv": 0.2630026026848561,
+    "eigvals": [
+      4.748001299333523e-17,
+      0.12797022649644588,
+      0.23789054396643403,
+      0.43665002695417315,
+      0.690686375318121,
+      0.8383006192446429,
+      0.8855859718290285,
+      1.0259540710896582
+    ],
+    "mean_sep": 1.3783151498486343,
+    "isolated": 0,
+    "top": [
+      {
+        "code": "51",
+        "heat": 0.614994946703198,
+        "title": "Sector 51 \u2014 Information"
+      },
+      {
+        "code": "81",
+        "heat": 0.5874597505658129,
+        "title": "Sector 81 \u2014 Other Services (except Publi"
+      },
+      {
+        "code": "31-33",
+        "heat": 0.5736329822080409,
+        "title": "Sector 31-33 \u2014 Manufacturing"
+      },
+      {
+        "code": "22",
+        "heat": 0.47318639161738646,
+        "title": "Sector 22 \u2014 Utilities"
+      },
+      {
+        "code": "92",
+        "heat": 0.42200108481623827,
+        "title": "Sector 92 \u2014 Public Administration"
+      }
+    ]
+  },
+  "B_mxbai_pca3": {
+    "name": "B) mxbai \u2192 PCA-3 (Textual-display geometry)",
+    "heat_cv": 0.24110323211469606,
+    "eigvals": [
+      -1.7072198107026354e-16,
+      0.10549713353655325,
+      0.17541565235615672,
+      0.4021733217267507,
+      0.6603272038716254,
+      0.8687963723108423,
+      0.9938140738293759,
+      1.1036766719051072
+    ],
+    "mean_sep": 1.3629672674251418,
+    "isolated": 0,
+    "top": [
+      {
+        "code": "23",
+        "heat": 0.5578455220612167,
+        "title": "Sector 23 \u2014 Construction"
+      },
+      {
+        "code": "31-33",
+        "heat": 0.5544722273524317,
+        "title": "Sector 31-33 \u2014 Manufacturing"
+      },
+      {
+        "code": "51",
+        "heat": 0.5229810244381266,
+        "title": "Sector 51 \u2014 Information"
+      },
+      {
+        "code": "11",
+        "heat": 0.5120365648806446,
+        "title": "Sector 11 \u2014 Agriculture, Forestry, Fishi"
+      },
+      {
+        "code": "48-49",
+        "heat": 0.47852285781210124,
+        "title": "Sector 48-49 \u2014 Transportation and Wareho"
+      }
+    ]
+  },
+  "C_synthetic3": {
+    "name": "C) heat\u00d7ordinal\u00d7||industry|| synthetic 3-D",
+    "heat_cv": 0.3052074923253175,
+    "eigvals": [
+      -3.400058012914542e-16,
+      0.01024744372199936,
+      0.04862155708146566,
+      0.5672672429640351,
+      0.8729242785610583,
+      1.1521801603752588,
+      1.1831124798759691,
+      1.1852628219218875
+    ],
+    "mean_sep": 1.2959397930413161,
+    "isolated": 0,
+    "top": [
+      {
+        "code": "31-33",
+        "heat": 0.6843513807529119,
+        "title": "Sector 31-33 \u2014 Manufacturing"
+      },
+      {
+        "code": "72",
+        "heat": 0.567010617578952,
+        "title": "Sector 72 \u2014 Accommodation and Food Servi"
+      },
+      {
+        "code": "53",
+        "heat": 0.5229638111197626,
+        "title": "Sector 53 \u2014 Real Estate and Rental and L"
+      },
+      {
+        "code": "42",
+        "heat": 0.4808900157567574,
+        "title": "Sector 42 \u2014 Wholesale Trade"
+      },
+      {
+        "code": "21",
+        "heat": 0.4641880851270662,
+        "title": "Sector 21 \u2014 Mining, Quarrying, and Oil a"
+      }
+    ]
+  },
+  "energy": {
+    "industry_pca3": 0.5386451279578608,
+    "mxbai_pca3": 0.2943171565947459
+  }
+}
