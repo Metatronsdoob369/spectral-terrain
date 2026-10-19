@@ -73,7 +73,9 @@ domains/                ← Domain-specific t+1 prediction implementations
 
 ## Key Architecture Facts
 
-- **3072-D = [1024 | 1024 | 1024]** — mxbai-embed-large output concatenated 3× for temporal encoding
+- **5-D Structural Coordinates (Static Code, Law, Medical):** Exactly 5 scalar coordinates (`[size, hash, lines/depth, defs/clauses, imports/citations]`) expressing metadata *through* the file. Zero GPU, zero network, evaluates in microseconds.
+- **3072-D = [1024 | 1024 | 1024] (Mutating Code Only):** Concatenation of past ($t-1$), present ($t_0$), and predicted ($t+1$) states. Used exclusively for temporal domains (physics ticks, mempool state, active code mutation) to add Time *over the top*.
+- **Contract Invariant:** Static text (statutory law, medical records, static source code) is STRICTLY FORBIDDEN from 3072-D. Concatenating `[v|v|v]` for static text produces identical thirds, destroying centroid accuracy and tripling embed costs. Static text uses 5-D structural coordinates (or a single 1024-D vector if semantic search is required).
 - **t+1 method for Roblox** = physics-deterministic (one engine tick forward, no ML)
 - **t+1 method for source-audit** = learned residual (pending implementation)
 - **Shatter > 0.05** = review required. **Shatter > 0.15** = apply deltaVector repair

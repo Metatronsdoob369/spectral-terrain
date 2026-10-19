@@ -59,10 +59,15 @@ export type Domain = z.infer<typeof DomainSchema>;
  * i.e., code whose execution semantics change through time-indexed states:
  * game engines (physics ticks), blockchain (block state), liquidity pools (AMM curves).
  *
- * Static source code, documents, and audit files do NOT change state over time.
- * Concatenating [v|v|v] for these domains produces geometrically identical thirds
- * with zero temporal signal — inflated dimensionality, degraded centroid accuracy,
- * and 3× unnecessary embed cost. These domains use a single 1024-D vector.
+ * Static source code, documents, statutory law, and medical/EHR files do NOT change state over time.
+ * Concatenating [v|v|v] for these static domains is STRICTLY FORBIDDEN / CONTRACT BREACH:
+ * it produces geometrically identical thirds with zero temporal signal, inflates dimensionality,
+ * degrades centroid accuracy, and triples embed cost.
+ *
+ * Rule:
+ * - Static code, law, and medical text use 5-D structural scalar coordinates (EMBED_PROVIDER=structural, metadata through it),
+ *   or a single 1024-D vector if semantic embedding is needed.
+ * - 3072-D is exclusively reserved for active temporal state progression (time over the top).
  *
  * Enforced at ingest time. Violations are a contract breach — not a config choice.
  */
