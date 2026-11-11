@@ -1,0 +1,22 @@
+{
+ "bands": [
+  "d1_size",
+  "d3_struct",
+  "d4_defs",
+  "d5_coupling"
+ ],
+ "mean": [
+  8.166041,
+  4.702886,
+  1.881046,
+  1.334462
+ ],
+ "std": [
+  1.049099,
+  0.902812,
+  0.544187,
+  1.242863
+ ],
+ "recipe": "z=(log-bands - mean)/std ; vector = z/||z|| ; centre = HEAD terrain",
+ "head_commit": "b03947a8d5d08820d5c30699a34ae96ca205de55"
+}

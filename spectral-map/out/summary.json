@@ -1,0 +1,20 @@
+{
+ "commits": 25,
+ "files": 83,
+ "distinct_blobs": 107,
+ "file_states": 1603,
+ "mutation_events": 24,
+ "vvv_triplet_fraction": 0.9715,
+ "band_share_of_mutation_energy": {
+  "d1_size": 0.0191,
+  "d2_hash": 0.8248,
+  "d3_struct": 0.0026,
+  "d4_defs": 0.0514,
+  "d5_coupling": 0.1022
+ },
+ "head_shatter_bands": {
+  "REVIEW": 72,
+  "ALARM": 8,
+  "ANCHOR": 3
+ }
+}
