@@ -69,6 +69,44 @@ The 1024-D path remains available for corpora where deep semantics earn their co
 
 ---
 
-*Engine: `engine/ingest.ts` · structural provider: `EMBED_PROVIDER=structural EMBED_DIM=5` · cold vault: `slop-canon` · collections: `spectral-heatmap-5`, `cold-map-5`*
+## THE TERRAIN HAS A PAST — `spectral-map/`
+
+*November 2026*
+
+Everything above is a snapshot. The contract says time belongs *inside* the geometry — `[v_t-1 | v_t | v_t+1]` — but for source code the `t+1` slot has read **"learned residual — PENDING"** since day one. Nothing to learn it from.
+
+There was. It's the git history.
+
+`spectral-map/` walks every commit of this repo and fingerprints every `.ts/.py/.lua` file with the same 5-D structural provider (`structuralFingerprint`, ported bit-exact, hash asserted against test vectors). Commit order becomes an **axis**, not a metadata field. The result is a `[file × band × commit]` cube: each file is a column of the terrain — a straight pillar while it holds still, a kink where it mutates — and every `(v_t-1, v_t, v_t+1)` triplet has a **real, observed future** instead of a placeholder.
+
+First run, on its own body — 25 commits, 83 files, 1,603 file-states:
+
+| Finding | Number | What it means for TGIL |
+|---|---|---|
+| Commit-time is mostly stillness | 24 of 1,520 file-steps mutate; **97.1 %** of commit-indexed triplets are `[v\|v\|v]` | A global clock reproduces the exact degeneracy the contract forbids. Time has to be indexed **per file, by its own mutations** (event time). |
+| The hash band is the noise floor of time | `d2` carries **82.5 %** of all mutation energy | Any edit throws the hash anywhere in [0,1). Movement through time in raw 5-D is mostly hash jitter — drop `d2` from temporal deltas. |
+| Raw cosine is a narrow cone | 5-D scores sit in ≈ 0.95–0.998 | All-positive log bands point the same way. Centred + standardized 4-D spreads them to ≈ −0.98–0.99 — the terrain gets relief. |
+| Past states are navigable | `engine/ingest.ts`@HEAD's nearest neighbour is the **original** `contracts/terrain.contract.ts` (commits #0–16) | That state no longer exists in the tree. A HEAD-only index can never return it. Time-as-geometry can. |
+
+**Why this is the point, not a side quest:**
+
+1. **It is the training set for `t+1`.** Every mutation in history is a supervised example: `(v_t-1, v_t) → v_t+1`. That is the pending source-audit predictor's dataset — and every repository with a history already has one. This repo yields 13 event-time triplets today (small); the 2,692-file body from the testimonial, or any active repo, yields far more.
+2. **The cold map gets a time axis.** A failure can be seated with the *trajectory* that led to it, not just where it died. "How far is this code from death" becomes "is this code *moving toward* a seat."
+3. **A human can finally see it.** `spectral-map/out/spectral_terrain_viewer.html` — offline, click any point for its `[t−1 | t | t+1]` spectrum. Agents read the cube; people read the terrain.
+
+**Open question for the contract.** "Static vs. mutating" currently splits domains on *execution* time (physics ticks, block state). Version history is a third clock that **every** code domain has — static source included. It earns temporal geometry only when indexed by event time and with the hash band removed; whether that becomes a sanctioned path (e.g. a 4-D-per-slot, 12-D triplet for `source-audit`) is a contract decision, not a config choice.
+
+```bash
+python3 spectral-map/build_spectral_map.py   # rebuild cube, maps, Qdrant points → spectral-map/out/
+spectral-map/load_qdrant.sh                  # upsert (default http://127.0.0.1:6333)
+```
+
+Details, outputs and caveats: [`spectral-map/README.md`](spectral-map/README.md). Shatter here is measured against the repo's own HEAD centroid, not a calibrated domain centroid.
+
+*Next: event-time triplets → fit the first `t+1` residual on a repo with real history → score held-out mutations against it.*
+
+---
+
+*Engine: `engine/ingest.ts` · structural provider: `EMBED_PROVIDER=structural EMBED_DIM=5` · cold vault: `slop-canon` · collections: `spectral-heatmap-5`, `cold-map-5`, `spectral-git-history-5`, `spectral-git-history-4c` (history, via `spectral-map/`)*
 
 *All compute local and sovereign. Never send code to an external API.*

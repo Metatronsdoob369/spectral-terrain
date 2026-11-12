@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## Unreleased
+
+### Added
+
+- `spectral-map/` — the repo's own git history as terrain. Python port of `structuralFingerprint` applied to every `.ts/.py/.lua` file at every commit → `[file × band × commit]` cube with observed `[v_t-1 | v_t | v_t+1]` triplets.
+  - `build_spectral_map.py` — single reproducible build into `spectral-map/out/`.
+  - Human view: `spectral_terrain_viewer.html` (offline 3-D terrain, click-to-spectrum) and `spectral_map_overview.png`.
+  - Agent view: `spectral_cube.npz`, `spectral_cube_long.csv`.
+  - Qdrant: `spectral-git-history-5` (5-D, cosine) and `spectral-git-history-4c` (hash-free, HEAD-centred, cosine; payload `z_distance`), loaded by `load_qdrant.sh`. Point ids `uuid5("spectral-terrain:<path>@<sha>")`, shared across both.
+- README section "The Terrain Has a Past".
+
+### Findings (HEAD `b03947a`)
+
+- 24 of 1,520 file-steps mutate; 97.1 % of commit-indexed triplets are `[v|v|v]` → temporal geometry for code needs event time, not commit time.
+- Complexity-hash band `d2` carries 82.5 % of mutation energy → exclude from temporal deltas.
+
 ## v0.1.1 — 2026-05-22
 
 ### Added
